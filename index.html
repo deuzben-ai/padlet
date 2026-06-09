@@ -19,7 +19,7 @@
   --citoyen:     #E65100;
   --culture:     #6A1B9A;
   --numerique:   #0277BD;
-  --intercult:   #F57F17;
+  --intercult:   #B45309;  /* was #F57F17 — ratio 2.9:1 sur blanc, corrigé à 5.5:1 */
   --affectif:    #B71C1C;
   --sport:       #00695C;
   --parentalite: #558B2F;
@@ -206,11 +206,6 @@ body {
 .vtab.active svg { opacity: 1; }
 
 /* M3 Filter Chips */
-.domain-bar {
-  max-width: 1400px; margin: 0 auto;
-  padding: 0 24px 12px;
-  display: flex; gap: 6px; flex-wrap: wrap;
-}
 .domain-chip {
   cursor: pointer;
   font-family: var(--font-body); font-size: .75rem; font-weight: 500;
@@ -489,6 +484,55 @@ footer a { color: var(--md-primary); text-decoration: none; }
 footer a:hover { text-decoration: underline; }
 
 /* ═══════════════════════════════════════════════════════
+   VIEW TRANSITION — fade + slide subtil
+═══════════════════════════════════════════════════════ */
+@keyframes viewIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.view { display: none; }
+.view.active { display: block; animation: viewIn .2s ease forwards; }
+
+/* ═══════════════════════════════════════════════════════
+   DOMAIN BAR — transition hauteur pour éviter le CLS
+═══════════════════════════════════════════════════════ */
+.domain-bar {
+  max-width: 1400px; margin: 0 auto;
+  padding: 0 24px 12px;
+  display: flex; gap: 6px; flex-wrap: wrap;
+  overflow: hidden;
+  max-height: 200px;
+  opacity: 1;
+  transition: max-height .22s ease, opacity .18s ease, padding .22s ease;
+}
+.domain-bar.collapsed {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+  padding-bottom: 0;
+}
+
+/* ═══════════════════════════════════════════════════════
+   SEARCH HIGHLIGHT
+═══════════════════════════════════════════════════════ */
+mark {
+  background: #FFF9C4;
+  color: #1C1B1F;
+  border-radius: 2px;
+  padding: 0 1px;
+  font-style: normal;
+}
+
+/* Lien externe — indicateur visuel (ouvre un nouvel onglet) */
+.rcard-link::after,
+.entry-link::after {
+  content: '↗';
+  font-size: .65em;
+  opacity: .7;
+  margin-left: 1px;
+}
+
+/* ═══════════════════════════════════════════════════════
    RESPONSIVE
 ═══════════════════════════════════════════════════════ */
 @media (max-width: 680px) {
@@ -685,18 +729,19 @@ function esc(s) {
 function linkIcon(sz=11) {
   return `<svg width="${sz}" height="${sz}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`;
 }
-function expandToggle(parentEl, descSel, toggleSel) {
-  parentEl.querySelectorAll(descSel).forEach((desc, i) => {
-    const btn = parentEl.querySelectorAll(toggleSel)[i];
-    if (!btn) return;
-    requestAnimationFrame(() => {
-      if (desc.scrollHeight <= desc.clientHeight + 2) { btn.style.display = 'none'; return; }
-    });
-    btn.addEventListener('click', () => {
-      const p = btn.closest('[data-expandable]') || desc.parentElement.parentElement;
-      p.classList.toggle('expanded');
-      btn.textContent = p.classList.contains('expanded') ? 'Réduire ↑' : 'Lire la suite ↓';
-    });
+
+/* P0 — surlignage des termes recherchés */
+function highlight(rawText, q) {
+  const escaped = esc(rawText);
+  if (!q) return escaped;
+  const safeQ = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return escaped.replace(new RegExp(`(${safeQ})`, 'gi'), '<mark>$1</mark>');
+}
+
+/* P0 — fix race condition polices : détection overflow après chargement des fonts */
+function checkOverflow(desc, btn) {
+  document.fonts.ready.then(() => {
+    if (desc.scrollHeight <= desc.clientHeight + 2) btn.style.display = 'none';
   });
 }
 
@@ -717,12 +762,13 @@ Object.keys(DOMAIN).forEach(dk => {
 
   const cardsHtml = entries.map(e => `
     <article class="rcard" data-expandable data-struct="${esc(e.struct)}"
+             data-raw-desc="${esc(e.desc)}"
              data-text="${esc((e.struct+' '+e.desc+' '+dom.label+' '+dom.short).toLowerCase())}">
       <div class="rcard-name">${esc(e.struct)}</div>
       <div class="rcard-desc">${esc(e.desc)}</div>
       <button class="rcard-toggle" type="button">Lire la suite ↓</button>
       <div class="rcard-footer">
-        ${e.url ? `<a class="rcard-link" href="${esc(e.url)}" target="_blank" rel="noopener">${linkIcon()} Voir la ressource</a>` : ''}
+        ${e.url ? `<a class="rcard-link" href="${esc(e.url)}" target="_blank" rel="noopener" aria-label="Voir la ressource de ${esc(e.struct)} (nouvel onglet)">${linkIcon()} Voir la ressource</a>` : ''}
       </div>
     </article>`).join('');
 
@@ -739,9 +785,7 @@ Object.keys(DOMAIN).forEach(dk => {
   sg.querySelectorAll('.rcard').forEach(card => {
     const desc = card.querySelector('.rcard-desc');
     const btn  = card.querySelector('.rcard-toggle');
-    requestAnimationFrame(() => {
-      if (desc.scrollHeight <= desc.clientHeight + 2) btn.style.display = 'none';
-    });
+    checkOverflow(desc, btn); /* P0 — attend le chargement des polices */
     btn.addEventListener('click', () => {
       card.classList.toggle('expanded');
       btn.textContent = card.classList.contains('expanded') ? 'Réduire ↑' : 'Lire la suite ↓';
@@ -812,9 +856,9 @@ sortedStructs.forEach(sname => {
         <div class="entry-domain-stripe"></div>
         <div class="entry-body">
           <span class="entry-domain-label">${dom.emoji} ${esc(dom.short)}</span>
-          <div class="entry-desc">${esc(e.desc)}</div>
+          <div class="entry-desc" data-raw="${esc(e.desc)}">${esc(e.desc)}</div>
           <button class="entry-toggle" type="button">Lire la suite ↓</button>
-          ${e.url ? `<a class="entry-link" href="${esc(e.url)}" target="_blank" rel="noopener">${linkIcon(10)} Voir la ressource</a>` : ''}
+          ${e.url ? `<a class="entry-link" href="${esc(e.url)}" target="_blank" rel="noopener" aria-label="Voir la ressource (nouvel onglet)">${linkIcon(10)} Voir la ressource</a>` : ''}
         </div>
       </div>`;
   }).join('');
@@ -831,9 +875,7 @@ sortedStructs.forEach(sname => {
   card.querySelectorAll('.struct-entry').forEach(entry => {
     const desc = entry.querySelector('.entry-desc');
     const btn  = entry.querySelector('.entry-toggle');
-    requestAnimationFrame(() => {
-      if (desc.scrollHeight <= desc.clientHeight + 2) btn.style.display = 'none';
-    });
+    checkOverflow(desc, btn); /* P0 — attend le chargement des polices */
     btn.addEventListener('click', () => {
       entry.classList.toggle('expanded');
       btn.textContent = entry.classList.contains('expanded') ? 'Réduire ↑' : 'Lire la suite ↓';
@@ -856,29 +898,80 @@ sortedStructs.forEach(sname => {
 });
 
 /* ═══════════════════════════════════════════
-   VIEW SWITCHING
+   VIEW SWITCHING — P0 focus + P1 CLS
 ═══════════════════════════════════════════ */
 function switchView(v) {
+  const domainBar = document.getElementById('domain-bar');
   document.querySelectorAll('.vtab').forEach(t => {
     t.classList.toggle('active', t.dataset.view === v);
     t.setAttribute('aria-selected', String(t.dataset.view === v));
   });
   document.getElementById('view-theme').classList.toggle('active',  v === 'theme');
   document.getElementById('view-struct').classList.toggle('active', v === 'struct');
-  document.getElementById('domain-bar').style.display = v === 'theme' ? '' : 'none';
+
+  /* P1 — transition de hauteur au lieu de display:none pour éviter le CLS */
+  domainBar.classList.toggle('collapsed', v !== 'theme');
+
+  /* P0 — déplacer le focus vers le panel actif pour les lecteurs d'écran */
+  const panel = document.getElementById(v === 'theme' ? 'view-theme' : 'view-struct');
+  panel.setAttribute('tabindex', '-1');
+  panel.focus({ preventScroll: true });
+
   updateResultCount();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+/* P1 — navigation clavier ←/→ dans le tablist (spec ARIA) */
+document.querySelector('.view-tabs').addEventListener('keydown', e => {
+  const tabs = [...document.querySelectorAll('.vtab')];
+  const idx  = tabs.indexOf(document.activeElement);
+  if (idx === -1) return;
+  if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+    e.preventDefault();
+    const next = e.key === 'ArrowRight' ? (idx + 1) % tabs.length : (idx - 1 + tabs.length) % tabs.length;
+    tabs[next].focus();
+    tabs[next].click();
+  }
+});
 
 document.querySelectorAll('.vtab').forEach(tab => {
   tab.addEventListener('click', () => switchView(tab.dataset.view));
 });
 
+/* P1 — compensation offset sticky pour le scroll alphabétique */
+function scrollToAnchor(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const stickyH = document.getElementById('controls').getBoundingClientRect().height;
+  const top = el.getBoundingClientRect().top + window.scrollY - stickyH - 16;
+  window.scrollTo({ top, behavior: 'smooth' });
+}
+
+/* Réassigner les écouteurs des alpha-chips avec la nouvelle fonction */
+document.querySelectorAll('.alpha-chip.has').forEach(btn => {
+  const oldBtn = btn.cloneNode(true);
+  btn.parentNode.replaceChild(oldBtn, btn);
+  oldBtn.addEventListener('click', () => scrollToAnchor(`struct-${oldBtn.textContent.trim()}`));
+});
+
 /* ═══════════════════════════════════════════
-   FILTERING
+   FILTERING + P1 SURLIGNAGE RECHERCHE
 ═══════════════════════════════════════════ */
 let activeDomain = 'all';
 let searchQ = '';
+
+/* Applique le highlight sur tous les éléments .rcard-desc et .entry-desc visibles */
+function applyHighlight(q) {
+  document.querySelectorAll('.rcard[data-raw-desc]').forEach(card => {
+    if (card.style.display === 'none') return;
+    card.querySelector('.rcard-desc').innerHTML = highlight(card.dataset.rawDesc, q);
+  });
+  document.querySelectorAll('.entry-desc[data-raw]').forEach(el => {
+    const entry = el.closest('.struct-entry');
+    if (entry && entry.closest('.struct-card.hidden')) return;
+    el.innerHTML = highlight(el.dataset.raw, q);
+  });
+}
 
 function applyThemeFilter(domain, q) {
   activeDomain = domain; searchQ = q;
@@ -896,6 +989,7 @@ function applyThemeFilter(domain, q) {
     sg.style.display = vis === 0 ? 'none' : '';
   });
   document.getElementById('theme-no-results').classList.toggle('visible', total === 0);
+  applyHighlight(q);
   return total;
 }
 
@@ -907,6 +1001,7 @@ function applyStructFilter(q) {
     if (show) vis++;
   });
   document.getElementById('struct-no-results').classList.toggle('visible', vis === 0);
+  applyHighlight(q);
   return vis;
 }
 
