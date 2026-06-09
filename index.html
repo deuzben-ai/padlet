@@ -4,398 +4,523 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ressources Pédagogiques — SDJES49 Maine-et-Loire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ═══════════════════════════════════════════
-   TOKENS
-═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════
+   MATERIAL DESIGN 3 — DARK THEME TOKENS
+═══════════════════════════════════════════════════════ */
 :root {
-  --sante:       #e91e8c;
-  --sciences:    #2979ff;
-  --enviro:      #00c853;
-  --citoyen:     #ff6d00;
-  --culture:     #aa00ff;
-  --numerique:   #00b0ff;
-  --intercult:   #ff9100;
-  --affectif:    #f50057;
-  --sport:       #00bfa5;
-  --parentalite: #76b82a;
+  /* Domain accent colours */
+  --sante:       #FF4D8D;
+  --sciences:    #448AFF;
+  --enviro:      #00E676;
+  --citoyen:     #FF6D00;
+  --culture:     #D500F9;
+  --numerique:   #00B0FF;
+  --intercult:   #FFAB40;
+  --affectif:    #FF1744;
+  --sport:       #1DE9B6;
+  --parentalite: #B2FF59;
 
-  --bg:    #0b0b18;
-  --bg2:   #10101f;
-  --bg3:   #16162e;
-  --line:  #1e1e3a;
-  --txt:   #f0f0f8;
-  --muted: #8080a0;
-  --dim:   #555570;
+  /* M3 Dark Surface System */
+  --md-bg:            #0F0D13;
+  --md-surface:       #1C1B1F;
+  --md-surface-v:     #211F26;
+  --md-surface-c:     #2B2930;
+  --md-surface-ch:    #36343B;
+  --md-outline:       #938F99;
+  --md-outline-v:     #49454F;
+  --md-on-surface:    #E6E1E5;
+  --md-on-surface-v:  #CAC4D0;
+  --md-on-bg:         #E6E1E5;
 
-  --r:     14px;
-  --rs:    8px;
+  /* M3 Primary (violet-indigo) */
+  --md-primary:       #D0BCFF;
+  --md-primary-c:     #4F378B;
+  --md-on-primary:    #381E72;
+
+  /* Typography */
+  --font-display: 'Outfit', sans-serif;
+  --font-body:    'Inter', sans-serif;
+
+  /* Elevation overlays (% white tint on dark bg) */
+  --elev1: rgba(255,255,255,.05);
+  --elev2: rgba(255,255,255,.08);
+  --elev3: rgba(255,255,255,.11);
+  --elev4: rgba(255,255,255,.12);
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ═══════════════════════════════════════════════════════
+   BASE RESET
+═══════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  background: var(--bg);
-  color: var(--txt);
+  font-family: var(--font-body);
+  background: var(--md-bg);
+  color: var(--md-on-surface);
+  min-height: 100vh;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* ═══════════════════════════════════════════
-   AMBIENT
-═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════
+   AMBIENT GLOW (subtile, M3-style)
+═══════════════════════════════════════════════════════ */
 .blobs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
 .blob  {
   position: absolute; border-radius: 50%;
-  filter: blur(90px); opacity: .065;
-  animation: bfloat linear infinite;
+  filter: blur(120px); opacity: .055;
+  animation: bfloat ease-in-out infinite alternate;
 }
-@keyframes bfloat {
-  0%   { transform: translateY(0)    scale(1); }
-  50%  { transform: translateY(-50px) scale(1.05); }
-  100% { transform: translateY(0)    scale(1); }
-}
+@keyframes bfloat { from { transform: translateY(0) scale(1); } to { transform: translateY(-60px) scale(1.08); } }
 
-/* ═══════════════════════════════════════════
-   HERO
-═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════
+   HERO  —  Material "Large top app bar" feeling
+═══════════════════════════════════════════════════════ */
 .hero {
   position: relative; z-index: 1;
   text-align: center;
-  padding: 72px 24px 56px;
-  overflow: hidden;
-}
-.hero::before {
-  content: '';
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 55% 50% at 15% 25%, #e91e8c28, transparent 65%),
-    radial-gradient(ellipse 45% 40% at 85% 15%, #2979ff28, transparent 65%),
-    radial-gradient(ellipse 50% 55% at 50% 100%,#aa00ff28, transparent 65%);
-  pointer-events: none;
+  padding: 80px 24px 64px;
+  background: linear-gradient(180deg, rgba(208,188,255,.07) 0%, transparent 100%);
+  border-bottom: 1px solid var(--md-outline-v);
 }
 .hero-eyebrow {
   display: inline-flex; align-items: center; gap: 8px;
-  font-size: .68rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
-  color: var(--muted); border: 1px solid var(--line); border-radius: 100px;
-  padding: 5px 16px; margin-bottom: 22px;
+  font-family: var(--font-body);
+  font-size: .72rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--md-primary);
+  background: color-mix(in srgb, var(--md-primary) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--md-primary) 25%, transparent);
+  border-radius: 100px; padding: 6px 18px; margin-bottom: 24px;
 }
-.hero-eyebrow span { width: 6px; height: 6px; border-radius: 50%; background: #c084fc; flex-shrink: 0; }
 .hero h1 {
-  font-size: clamp(1.7rem, 4.5vw, 3.2rem); font-weight: 900; line-height: 1.1;
-  max-width: 820px; margin: 0 auto 14px;
-  background: linear-gradient(140deg, #ffffff 20%, #c084fc 55%, #e91e8c 100%);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.6rem);
+  font-weight: 900; line-height: 1.08; letter-spacing: -.02em;
+  max-width: 860px; margin: 0 auto 12px;
+  color: var(--md-on-surface);
+}
+.hero h1 em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--md-primary) 0%, #F38FFF 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
-.hero-sub { color: var(--muted); font-size: .95rem; margin-bottom: 38px; }
-.hero-stats { display: flex; gap: 40px; justify-content: center; flex-wrap: wrap; }
+.hero-sub {
+  font-family: var(--font-body);
+  font-size: 1rem; font-weight: 400;
+  color: var(--md-on-surface-v); margin-bottom: 48px; line-height: 1.6;
+}
+.hero-stats {
+  display: flex; gap: 0; justify-content: center; flex-wrap: wrap;
+  max-width: 500px; margin: 0 auto;
+  background: var(--md-surface-v);
+  border: 1px solid var(--md-outline-v);
+  border-radius: 20px; overflow: hidden;
+}
+.stat {
+  flex: 1; min-width: 120px; padding: 20px 16px; text-align: center;
+  border-right: 1px solid var(--md-outline-v);
+}
+.stat:last-child { border-right: none; }
 .stat-num {
-  font-size: 2.2rem; font-weight: 900; display: block;
-  background: linear-gradient(135deg, #fff, #c084fc);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  font-family: var(--font-display);
+  font-size: 2.2rem; font-weight: 800; display: block;
+  color: var(--md-primary); line-height: 1;
 }
-.stat-label { font-size: .7rem; color: var(--dim); text-transform: uppercase; letter-spacing: .12em; }
+.stat-label {
+  font-family: var(--font-body);
+  font-size: .7rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--md-on-surface-v); margin-top: 4px; display: block;
+}
 
-/* ═══════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════
    STICKY CONTROLS
-═══════════════════════════════════════════ */
+═══════════════════════════════════════════════════════ */
 .controls {
   position: sticky; top: 0; z-index: 200;
-  background: rgba(11,11,24,.9);
-  backdrop-filter: blur(20px) saturate(1.5);
-  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--md-surface) 92%, transparent);
+  backdrop-filter: blur(24px) saturate(1.8);
+  border-bottom: 1px solid var(--md-outline-v);
 }
-.controls-inner {
+.controls-row1 {
   max-width: 1400px; margin: 0 auto;
   padding: 12px 24px;
   display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
 }
-.search-wrap { position: relative; flex: 1; min-width: 200px; max-width: 360px; }
-.search-wrap svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--dim); pointer-events: none; }
+
+/* M3 Search Bar */
+.search-wrap { position: relative; flex: 1; min-width: 180px; max-width: 400px; }
+.search-wrap .ico {
+  position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+  color: var(--md-outline); pointer-events: none;
+}
 #search {
-  width: 100%; padding: 9px 14px 9px 38px;
-  background: var(--bg3); border: 1px solid var(--line);
-  border-radius: 100px; color: var(--txt); font-size: .88rem;
-  outline: none; transition: border-color .2s;
+  width: 100%; padding: 10px 16px 10px 44px;
+  background: var(--md-surface-ch);
+  border: none; border-radius: 100px;
+  color: var(--md-on-surface);
+  font-family: var(--font-body); font-size: .9rem; font-weight: 400;
+  outline: 2px solid transparent; outline-offset: 2px;
+  transition: outline-color .2s, background .2s;
 }
-#search:focus { border-color: #c084fc; }
-#search::placeholder { color: var(--dim); }
-.result-count { font-size: .75rem; color: var(--dim); white-space: nowrap; }
-.result-count strong { color: var(--txt); }
+#search:focus {
+  outline-color: var(--md-primary);
+  background: var(--md-surface-c);
+}
+#search::placeholder { color: var(--md-outline); }
 
-/* View tabs */
-.view-tabs { display: flex; gap: 4px; margin-left: auto; }
+/* Result count */
+.result-count {
+  font-family: var(--font-body); font-size: .78rem; font-weight: 400;
+  color: var(--md-on-surface-v); white-space: nowrap;
+}
+.result-count strong { font-weight: 600; color: var(--md-on-surface); }
+
+/* M3 Navigation Tabs */
+.view-tabs {
+  display: flex; gap: 0; margin-left: auto;
+  background: var(--md-surface-v);
+  border: 1px solid var(--md-outline-v); border-radius: 100px;
+  padding: 3px;
+}
 .vtab {
-  cursor: pointer; font-size: .78rem; font-weight: 600;
-  padding: 7px 16px; border-radius: 100px;
-  border: 1.5px solid var(--line);
-  background: transparent; color: var(--muted);
-  transition: all .2s; white-space: nowrap;
-  display: flex; align-items: center; gap: 6px;
+  cursor: pointer;
+  font-family: var(--font-body); font-size: .8rem; font-weight: 500; letter-spacing: .01em;
+  padding: 7px 20px; border-radius: 100px;
+  border: none; background: transparent; color: var(--md-on-surface-v);
+  transition: all .2s; display: flex; align-items: center; gap: 7px;
+  white-space: nowrap;
 }
-.vtab svg { opacity: .6; }
-.vtab:hover { color: var(--txt); border-color: var(--dim); }
+.vtab svg { opacity: .7; transition: opacity .2s; }
+.vtab:hover { color: var(--md-on-surface); background: var(--elev1); }
 .vtab.active {
-  background: var(--bg3); color: #fff;
-  border-color: #c084fc;
-  box-shadow: 0 0 0 1px #c084fc40;
+  background: var(--md-primary-c);
+  color: var(--md-primary);
+  box-shadow: 0 1px 4px rgba(0,0,0,.4);
 }
+.vtab.active svg { opacity: 1; }
 
-/* Domain filter row (par thème only) */
+/* M3 Filter Chips row */
 .domain-bar {
   max-width: 1400px; margin: 0 auto;
   padding: 0 24px 12px;
   display: flex; gap: 6px; flex-wrap: wrap;
 }
 .domain-chip {
-  cursor: pointer; font-size: .7rem; font-weight: 600;
-  padding: 4px 13px; border-radius: 100px;
-  border: 1.5px solid var(--line);
-  background: transparent; color: var(--muted);
+  cursor: pointer;
+  font-family: var(--font-body); font-size: .75rem; font-weight: 500;
+  padding: 6px 16px; border-radius: 8px;
+  border: 1px solid var(--md-outline-v);
+  background: transparent; color: var(--md-on-surface-v);
   transition: all .18s; white-space: nowrap;
+  display: flex; align-items: center; gap: 5px;
 }
-.domain-chip:hover { color: var(--txt); }
+.domain-chip .chip-check {
+  width: 16px; height: 16px; overflow: hidden; flex-shrink: 0;
+  transition: width .18s; width: 0;
+}
+.domain-chip:hover {
+  background: var(--elev1); border-color: var(--md-outline);
+  color: var(--md-on-surface);
+}
 .domain-chip.active {
-  color: #fff;
-  background: color-mix(in srgb, var(--c) 20%, transparent);
+  background: color-mix(in srgb, var(--c) 15%, var(--md-surface-v));
   border-color: var(--c);
-  box-shadow: 0 0 10px color-mix(in srgb, var(--c) 40%, transparent);
+  color: var(--c);
 }
+.domain-chip.active .chip-check { width: 16px; }
 
-/* ═══════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════
    LAYOUT SHELL
-═══════════════════════════════════════════ */
+═══════════════════════════════════════════════════════ */
 .view { display: none; }
 .view.active { display: block; }
-.content-wrap { max-width: 1400px; margin: 0 auto; padding: 32px 20px 64px; }
+.content-wrap { max-width: 1400px; margin: 0 auto; padding: 32px 20px 80px; }
 
-/* ═══════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════
    VIEW A — PAR THÈME
-═══════════════════════════════════════════ */
-.section-group { margin-bottom: 48px; }
+═══════════════════════════════════════════════════════ */
+.section-group { margin-bottom: 40px; }
 .section-group.hidden { display: none; }
 
+/* M3 section header — "Filled tonal" surface */
 .section-header {
-  display: flex; align-items: center; gap: 14px;
-  padding: 18px 22px;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--c) 14%, var(--bg2)), var(--bg2));
-  border: 1px solid color-mix(in srgb, var(--c) 25%, var(--line));
-  border-radius: var(--r) var(--r) 0 0;
+  display: flex; align-items: center; gap: 16px;
+  padding: 20px 24px;
+  background: color-mix(in srgb, var(--c) 12%, var(--md-surface-v));
+  border: 1px solid color-mix(in srgb, var(--c) 22%, var(--md-outline-v));
   border-bottom: none;
-  position: relative;
-  overflow: hidden;
+  border-radius: 16px 16px 0 0;
 }
-.section-header::before {
-  content: '';
-  position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
-  background: var(--c);
+.section-emoji {
+  font-size: 1.5rem; line-height: 1;
+  width: 44px; height: 44px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: color-mix(in srgb, var(--c) 18%, var(--md-surface-c));
+  border-radius: 12px;
 }
-.section-emoji { font-size: 1.4rem; line-height: 1; flex-shrink: 0; }
-.section-name { font-size: .95rem; font-weight: 700; color: #fff; flex: 1; }
+.section-name {
+  font-family: var(--font-display);
+  font-size: 1rem; font-weight: 700; color: var(--md-on-surface); flex: 1;
+}
 .section-count {
-  font-size: .72rem; font-weight: 700;
-  color: var(--c); background: color-mix(in srgb, var(--c) 15%, transparent);
-  border: 1px solid color-mix(in srgb, var(--c) 30%, transparent);
-  padding: 3px 10px; border-radius: 100px;
+  font-family: var(--font-body);
+  font-size: .72rem; font-weight: 600; letter-spacing: .04em;
+  color: var(--c);
+  background: color-mix(in srgb, var(--c) 14%, var(--md-surface-c));
+  border: 1px solid color-mix(in srgb, var(--c) 28%, transparent);
+  padding: 4px 12px; border-radius: 100px;
 }
 
+/* Card grid — M3 gap */
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1px;
-  background: var(--bg2);
-  border: 1px solid color-mix(in srgb, var(--c) 25%, var(--line));
+  background: color-mix(in srgb, var(--c) 18%, var(--md-outline-v));
+  border: 1px solid color-mix(in srgb, var(--c) 22%, var(--md-outline-v));
   border-top: none;
-  border-radius: 0 0 var(--r) var(--r);
+  border-radius: 0 0 16px 16px;
   overflow: hidden;
 }
 
-/* Resource card */
+/* M3 Elevated Card */
 .rcard {
-  background: var(--bg3);
-  padding: 18px 20px 20px;
+  background: var(--md-surface-v);
+  padding: 20px 22px 22px;
   display: flex; flex-direction: column; gap: 10px;
-  transition: background .15s;
+  transition: background .18s;
+  position: relative;
 }
-.rcard:hover { background: color-mix(in srgb, var(--c) 6%, var(--bg3)); }
+.rcard::after {
+  content: ''; position: absolute; inset: 0;
+  background: color-mix(in srgb, var(--c) 0%, transparent);
+  transition: background .18s; pointer-events: none;
+}
+.rcard:hover { background: var(--md-surface-c); }
+.rcard:hover::after { background: color-mix(in srgb, var(--c) 5%, transparent); }
+
 .rcard-name {
-  font-size: .95rem; font-weight: 700; color: #fff; line-height: 1.3;
+  font-family: var(--font-display);
+  font-size: 1rem; font-weight: 700; color: var(--md-on-surface); line-height: 1.25;
 }
 .rcard-desc {
-  font-size: .8rem; color: var(--muted); line-height: 1.7;
+  font-family: var(--font-body);
+  font-size: .825rem; font-weight: 400; color: var(--md-on-surface-v);
+  line-height: 1.7;
   display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;
   flex: 1;
 }
 .rcard.expanded .rcard-desc { -webkit-line-clamp: unset; }
+
 .rcard-toggle {
-  font-size: .7rem; color: var(--c); background: none; border: none; padding: 0;
-  font-family: inherit; cursor: pointer; text-align: left; width: fit-content;
+  font-family: var(--font-body); font-size: .72rem; font-weight: 500;
+  color: var(--c); background: none; border: none; padding: 0;
+  cursor: pointer; text-align: left; width: fit-content;
+  letter-spacing: .02em;
 }
 .rcard-toggle:hover { text-decoration: underline; }
-.rcard-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
-.rcard-domain-pill {
-  font-size: .62rem; font-weight: 700; letter-spacing: .06em;
-  color: var(--c); background: color-mix(in srgb, var(--c) 12%, transparent);
-  border: 1px solid color-mix(in srgb, var(--c) 25%, transparent);
-  padding: 2px 9px; border-radius: 100px;
-}
-.rcard-link {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-size: .7rem; font-weight: 600; color: var(--c);
-  text-decoration: none; padding: 4px 12px; border-radius: 100px;
-  border: 1px solid color-mix(in srgb, var(--c) 35%, transparent);
-  transition: background .15s, color .15s;
-}
-.rcard-link:hover { background: var(--c); color: #fff; }
 
-/* ═══════════════════════════════════════════
+.rcard-footer { display: flex; align-items: center; justify-content: flex-end; margin-top: 2px; }
+
+/* M3 Text Button with icon */
+.rcard-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-body); font-size: .78rem; font-weight: 600; letter-spacing: .04em;
+  color: var(--c); text-decoration: none;
+  padding: 7px 16px; border-radius: 100px;
+  background: color-mix(in srgb, var(--c) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--c) 28%, transparent);
+  transition: background .18s;
+}
+.rcard-link:hover { background: color-mix(in srgb, var(--c) 22%, transparent); }
+
+/* ═══════════════════════════════════════════════════════
    VIEW B — PAR STRUCTURE
-═══════════════════════════════════════════ */
+═══════════════════════════════════════════════════════ */
+
+/* Alphabet navigation */
 .alpha-bar {
-  display: flex; gap: 4px; flex-wrap: wrap;
-  padding-bottom: 24px;
+  display: flex; gap: 3px; flex-wrap: wrap;
+  padding-bottom: 28px;
 }
 .alpha-chip {
-  cursor: pointer; font-size: .72rem; font-weight: 700;
-  width: 30px; height: 30px;
+  cursor: default;
+  font-family: var(--font-display); font-size: .75rem; font-weight: 700;
+  width: 32px; height: 32px;
   display: flex; align-items: center; justify-content: center;
-  border-radius: var(--rs); border: 1.5px solid var(--line);
-  background: transparent; color: var(--muted);
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent; color: var(--md-outline-v);
   transition: all .15s;
 }
-.alpha-chip:hover { color: #fff; border-color: var(--dim); }
-.alpha-chip.has { color: var(--txt); border-color: #2a2a50; background: var(--bg3); }
-.alpha-chip.has:hover { border-color: #c084fc; color: #c084fc; }
+.alpha-chip.has {
+  cursor: pointer;
+  color: var(--md-on-surface-v);
+  background: var(--md-surface-v);
+  border-color: var(--md-outline-v);
+}
+.alpha-chip.has:hover {
+  color: var(--md-primary);
+  background: color-mix(in srgb, var(--md-primary) 12%, var(--md-surface-v));
+  border-color: var(--md-primary);
+}
 
+/* M3 Outlined Card → Structure cards */
 .struct-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
   gap: 16px;
 }
 .struct-card {
-  background: var(--bg2);
-  border: 1px solid var(--line);
-  border-radius: var(--r);
-  overflow: hidden;
-  transition: transform .2s, box-shadow .2s;
+  background: var(--md-surface);
+  border: 1px solid var(--md-outline-v);
+  border-radius: 16px; overflow: hidden;
+  transition: border-color .2s, box-shadow .2s, transform .2s;
 }
 .struct-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 36px rgba(0,0,0,.4);
+  border-color: var(--md-outline);
+  box-shadow: 0 4px 20px rgba(0,0,0,.35), 0 1px 4px rgba(0,0,0,.2);
+  transform: translateY(-2px);
 }
 .struct-card.hidden { display: none; }
 
+/* Card top section */
 .struct-head {
-  padding: 16px 20px 0;
-  display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;
+  padding: 20px 20px 0;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
 }
-.struct-name { font-size: 1.05rem; font-weight: 800; color: #fff; line-height: 1.2; }
-.multi-badge {
-  flex-shrink: 0;
-  font-size: .6rem; font-weight: 800; letter-spacing: .08em;
-  text-transform: uppercase;
-  padding: 3px 9px; border-radius: 100px;
-  background: linear-gradient(135deg, #c084fc22, #e91e8c22);
-  border: 1px solid #c084fc44; color: #c084fc;
-  white-space: nowrap;
+.struct-name {
+  font-family: var(--font-display);
+  font-size: 1.1rem; font-weight: 800; color: var(--md-on-surface); line-height: 1.2;
 }
 
+/* M3 "Tonal" badge */
+.multi-badge {
+  flex-shrink: 0; white-space: nowrap;
+  font-family: var(--font-body); font-size: .62rem; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; padding: 4px 10px; border-radius: 8px;
+  background: color-mix(in srgb, var(--md-primary) 16%, var(--md-surface-c));
+  color: var(--md-primary);
+  border: 1px solid color-mix(in srgb, var(--md-primary) 30%, transparent);
+}
+
+/* Domain pills (M3 Filter Chip) */
 .struct-pills {
   display: flex; gap: 5px; flex-wrap: wrap;
-  padding: 10px 20px;
+  padding: 12px 20px 14px;
 }
 .struct-pill {
-  font-size: .62rem; font-weight: 700; letter-spacing: .05em;
-  color: var(--c); background: color-mix(in srgb, var(--c) 12%, transparent);
-  border: 1px solid color-mix(in srgb, var(--c) 30%, transparent);
-  padding: 3px 10px; border-radius: 100px;
-  cursor: pointer; transition: background .15s;
+  cursor: pointer;
+  font-family: var(--font-body); font-size: .68rem; font-weight: 600; letter-spacing: .04em;
+  color: var(--c);
+  background: color-mix(in srgb, var(--c) 11%, var(--md-surface-v));
+  border: 1px solid color-mix(in srgb, var(--c) 28%, transparent);
+  padding: 4px 12px; border-radius: 8px;
+  transition: background .15s;
+  display: flex; align-items: center; gap: 4px;
 }
-.struct-pill:hover { background: color-mix(in srgb, var(--c) 25%, transparent); }
+.struct-pill:hover { background: color-mix(in srgb, var(--c) 22%, var(--md-surface-v)); }
 
-.struct-entries { border-top: 1px solid var(--line); }
+/* Entries */
+.struct-entries { border-top: 1px solid var(--md-outline-v); }
 
 .struct-entry {
-  display: flex; gap: 0;
-  border-bottom: 1px solid var(--line);
-  position: relative;
+  display: flex;
+  border-bottom: 1px solid var(--md-outline-v);
+  transition: background .15s;
 }
 .struct-entry:last-child { border-bottom: none; }
+.struct-entry:hover { background: var(--elev1); }
 
-.entry-domain-stripe {
-  width: 3px; flex-shrink: 0;
-  background: var(--c);
-}
-.entry-body { padding: 12px 16px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.entry-domain-stripe { width: 4px; flex-shrink: 0; background: var(--c); }
+
+.entry-body { padding: 14px 18px; flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+
 .entry-domain-label {
-  font-size: .62rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
-  color: var(--c);
+  font-family: var(--font-body);
+  font-size: .65rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--c); display: flex; align-items: center; gap: 5px;
 }
+
 .entry-desc {
-  font-size: .78rem; color: var(--muted); line-height: 1.65;
+  font-family: var(--font-body);
+  font-size: .8rem; font-weight: 400; color: var(--md-on-surface-v); line-height: 1.7;
   display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
 }
 .struct-entry.expanded .entry-desc { -webkit-line-clamp: unset; }
+
 .entry-toggle {
-  font-size: .68rem; color: var(--c); background: none; border: none; padding: 0;
-  font-family: inherit; cursor: pointer; text-align: left; width: fit-content;
+  font-family: var(--font-body); font-size: .7rem; font-weight: 500;
+  color: var(--c); background: none; border: none; padding: 0;
+  cursor: pointer; text-align: left; width: fit-content;
 }
 .entry-toggle:hover { text-decoration: underline; }
+
 .entry-link {
   display: inline-flex; align-items: center; gap: 5px;
-  font-size: .68rem; font-weight: 600; color: var(--c);
-  text-decoration: none; padding: 3px 10px; border-radius: 100px;
-  border: 1px solid color-mix(in srgb, var(--c) 35%, transparent);
-  width: fit-content; transition: background .15s, color .15s;
+  font-family: var(--font-body); font-size: .72rem; font-weight: 600; letter-spacing: .03em;
+  color: var(--c); text-decoration: none;
+  padding: 4px 12px; border-radius: 100px; width: fit-content;
+  background: color-mix(in srgb, var(--c) 9%, transparent);
+  border: 1px solid color-mix(in srgb, var(--c) 28%, transparent);
+  transition: background .15s;
 }
-.entry-link:hover { background: var(--c); color: #fff; }
+.entry-link:hover { background: color-mix(in srgb, var(--c) 22%, transparent); }
 
-/* ═══════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════
    NO RESULTS
-═══════════════════════════════════════════ */
+═══════════════════════════════════════════════════════ */
 .no-results {
-  display: none; text-align: center; padding: 80px 24px; color: var(--dim); font-size: 1rem;
+  display: none; text-align: center; padding: 80px 24px;
+  font-family: var(--font-body); font-size: .95rem; color: var(--md-outline);
 }
 .no-results.visible { display: block; }
 
-/* ═══════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════
    FOOTER
-═══════════════════════════════════════════ */
+═══════════════════════════════════════════════════════ */
 footer {
   position: relative; z-index: 1;
-  text-align: center; padding: 24px;
-  font-size: .73rem; color: var(--dim);
-  border-top: 1px solid var(--line);
+  text-align: center; padding: 28px 24px;
+  font-family: var(--font-body); font-size: .75rem; font-weight: 400;
+  color: var(--md-outline);
+  border-top: 1px solid var(--md-outline-v);
+  background: var(--md-surface);
 }
-footer a { color: #c084fc; text-decoration: none; }
+footer a { color: var(--md-primary); text-decoration: none; }
 footer a:hover { text-decoration: underline; }
 
-/* ═══════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════
    RESPONSIVE
-═══════════════════════════════════════════ */
-@media (max-width: 640px) {
-  .hero { padding: 52px 16px 40px; }
-  .controls-inner { flex-direction: column; align-items: stretch; }
+═══════════════════════════════════════════════════════ */
+@media (max-width: 680px) {
+  .hero { padding: 56px 16px 40px; }
+  .controls-row1 { flex-direction: column; align-items: stretch; }
   .search-wrap { max-width: 100%; }
   .view-tabs { justify-content: center; }
   .struct-grid { grid-template-columns: 1fr; }
-  .cards-grid { grid-template-columns: 1fr; }
+  .cards-grid  { grid-template-columns: 1fr; }
+  .hero-stats  { border-radius: 16px; }
 }
 </style>
 </head>
 <body>
 
-<!-- AMBIENT BLOBS -->
+<!-- Ambient glow -->
 <div class="blobs" aria-hidden="true">
-  <div class="blob" style="width:600px;height:600px;background:#e91e8c;top:-200px;left:-150px;animation-duration:20s"></div>
-  <div class="blob" style="width:500px;height:500px;background:#2979ff;top:25%;right:-100px;animation-duration:25s;animation-delay:-9s"></div>
-  <div class="blob" style="width:700px;height:700px;background:#aa00ff;bottom:-200px;left:25%;animation-duration:30s;animation-delay:-5s"></div>
-  <div class="blob" style="width:400px;height:400px;background:#00c853;bottom:5%;right:5%;animation-duration:22s;animation-delay:-14s"></div>
+  <div class="blob" style="width:640px;height:640px;background:#D500F9;top:-180px;left:-160px;animation-duration:18s"></div>
+  <div class="blob" style="width:520px;height:520px;background:#448AFF;top:20%;right:-120px;animation-duration:24s;animation-delay:-7s"></div>
+  <div class="blob" style="width:560px;height:560px;background:#D0BCFF;bottom:-160px;left:30%;animation-duration:28s;animation-delay:-4s"></div>
 </div>
 
-<!-- HERO -->
+<!-- ── HERO ── -->
 <header class="hero">
-  <div class="hero-eyebrow"><span></span>SDJES49 · Maine-et-Loire<span></span></div>
-  <h1>Structures Ressources<br>Outils Pédagogiques &amp; Accompagnement</h1>
+  <div class="hero-eyebrow">SDJES49 · Maine-et-Loire</div>
+  <h1>Structures Ressources<br><em>Outils Pédagogiques</em><br>&amp; Accompagnement</h1>
   <p class="hero-sub">Annuaire collaboratif des acteurs de l'éducation populaire en Anjou</p>
   <div class="hero-stats">
     <div class="stat"><span class="stat-num">46</span><span class="stat-label">ressources</span></div>
@@ -404,189 +529,224 @@ footer a:hover { text-decoration: underline; }
   </div>
 </header>
 
-<!-- CONTROLS -->
+<!-- ── CONTROLS ── -->
 <div class="controls" id="controls">
-  <div class="controls-inner">
+  <div class="controls-row1">
     <div class="search-wrap">
-      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input id="search" type="search" placeholder="Rechercher une structure, outil, thème…" autocomplete="off">
+      <svg class="ico" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input id="search" type="search" placeholder="Rechercher une structure, outil, thème…" autocomplete="off" aria-label="Rechercher">
     </div>
-    <span class="result-count" id="result-count"></span>
-    <div class="view-tabs">
-      <button class="vtab active" data-view="theme" type="button">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+    <span class="result-count" id="result-count" aria-live="polite"></span>
+    <div class="view-tabs" role="tablist">
+      <button class="vtab active" data-view="theme" type="button" role="tab" aria-selected="true">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
         Par thème
       </button>
-      <button class="vtab" data-view="struct" type="button">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <button class="vtab" data-view="struct" type="button" role="tab" aria-selected="false">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         Par structure
       </button>
     </div>
   </div>
-  <!-- domain chips (visible only in theme view) -->
-  <div class="domain-bar" id="domain-bar">
-    <button class="domain-chip active" data-domain="all" type="button" style="--c:#c084fc">Tous les domaines</button>
-    <button class="domain-chip" data-domain="sante"       type="button" style="--c:var(--sante)">🧠 Santé</button>
-    <button class="domain-chip" data-domain="sciences"    type="button" style="--c:var(--sciences)">🔬 Sciences</button>
-    <button class="domain-chip" data-domain="enviro"      type="button" style="--c:var(--enviro)">🌿 Environnement</button>
-    <button class="domain-chip" data-domain="citoyen"     type="button" style="--c:var(--citoyen)">🗳 Citoyenneté</button>
-    <button class="domain-chip" data-domain="culture"     type="button" style="--c:var(--culture)">🎭 Culture &amp; Médias</button>
-    <button class="domain-chip" data-domain="numerique"   type="button" style="--c:var(--numerique)">💻 Numérique</button>
-    <button class="domain-chip" data-domain="intercult"   type="button" style="--c:var(--intercult)">🌍 Interculturel</button>
-    <button class="domain-chip" data-domain="affectif"    type="button" style="--c:var(--affectif)">❤ Vie affective</button>
-    <button class="domain-chip" data-domain="sport"       type="button" style="--c:var(--sport)">⚽ Sport</button>
-    <button class="domain-chip" data-domain="parentalite" type="button" style="--c:var(--parentalite)">👨‍👩‍👧 Parentalité</button>
+  <!-- Domain filter chips -->
+  <div class="domain-bar" id="domain-bar" role="group" aria-label="Filtrer par domaine">
+    <button class="domain-chip active" data-domain="all" type="button" style="--c:var(--md-primary)">
+      <svg class="chip-check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      Tous les domaines
+    </button>
+    <button class="domain-chip" data-domain="sante"       type="button" style="--c:var(--sante)">
+      <svg class="chip-check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      🧠 Santé
+    </button>
+    <button class="domain-chip" data-domain="sciences"    type="button" style="--c:var(--sciences)">
+      <svg class="chip-check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      🔬 Sciences
+    </button>
+    <button class="domain-chip" data-domain="enviro"      type="button" style="--c:var(--enviro)">
+      <svg class="chip-check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      🌿 Environnement
+    </button>
+    <button class="domain-chip" data-domain="citoyen"     type="button" style="--c:var(--citoyen)">
+      <svg class="chip-check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      🗳 Citoyenneté
+    </button>
+    <button class="domain-chip" data-domain="culture"     type="button" style="--c:var(--culture)">
+      <svg class="chip-check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      🎭 Culture &amp; Médias
+    </button>
+    <button class="domain-chip" data-domain="numerique"   type="button" style="--c:var(--numerique)">
+      <svg class="chip-check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      💻 Numérique
+    </button>
+    <button class="domain-chip" data-domain="intercult"   type="button" style="--c:var(--intercult)">
+      <svg class="chip-check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      🌍 Interculturel
+    </button>
+    <button class="domain-chip" data-domain="affectif"    type="button" style="--c:var(--affectif)">
+      <svg class="chip-check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      ❤ Vie affective
+    </button>
+    <button class="domain-chip" data-domain="sport"       type="button" style="--c:var(--sport)">
+      <svg class="chip-check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      ⚽ Sport
+    </button>
+    <button class="domain-chip" data-domain="parentalite" type="button" style="--c:var(--parentalite)">
+      <svg class="chip-check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      👨‍👩‍👧 Parentalité
+    </button>
   </div>
 </div>
 
 <!-- ════ VIEW A : PAR THÈME ════ -->
-<main class="view active content-wrap" id="view-theme">
+<main class="view active content-wrap" id="view-theme" role="tabpanel">
   <div id="theme-sections"></div>
   <div class="no-results" id="theme-no-results">Aucun résultat pour cette recherche.</div>
 </main>
 
 <!-- ════ VIEW B : PAR STRUCTURE ════ -->
-<main class="view content-wrap" id="view-struct">
-  <div class="alpha-bar" id="alpha-bar"></div>
+<main class="view content-wrap" id="view-struct" role="tabpanel">
+  <div class="alpha-bar" id="alpha-bar" role="navigation" aria-label="Navigation alphabétique"></div>
   <div class="struct-grid" id="struct-grid"></div>
   <div class="no-results" id="struct-no-results">Aucune structure ne correspond à cette recherche.</div>
 </main>
 
 <footer>
-  Source : Padlet SDJES49 ·
+  Source&nbsp;: Padlet SDJES49 ·
   <a href="https://padlet.com/llemallierafocal/structures-ressources-outils-pedagogiques-accompagnement-il1ur0ewtn68w5ic" target="_blank" rel="noopener">padlet.com</a>
+  &nbsp;·&nbsp; Maine-et-Loire · 2026
 </footer>
 
 <script>
 /* ═══════════════════════════════════════════
-   DATA
+   DATA & CONSTANTS
 ═══════════════════════════════════════════ */
 const DOMAIN = {
-  sante:       { label:"Santé & santé mentale",         short:"Santé",         emoji:"🧠", cssVar:"var(--sante)"       },
-  sciences:    { label:"Sciences & techniques",          short:"Sciences",      emoji:"🔬", cssVar:"var(--sciences)"    },
-  enviro:      { label:"Environnement & DD",             short:"Environnement", emoji:"🌿", cssVar:"var(--enviro)"      },
-  citoyen:     { label:"Citoyenneté",                    short:"Citoyenneté",   emoji:"🗳", cssVar:"var(--citoyen)"     },
-  culture:     { label:"Pratiques culturelles & médias", short:"Culture",       emoji:"🎭", cssVar:"var(--culture)"     },
-  numerique:   { label:"Éducation au numérique",         short:"Numérique",     emoji:"💻", cssVar:"var(--numerique)"   },
-  intercult:   { label:"Éducation à l'interculturel",    short:"Interculturel", emoji:"🌍", cssVar:"var(--intercult)"   },
-  affectif:    { label:"Vie affective & sexuelle",        short:"Vie affective", emoji:"❤", cssVar:"var(--affectif)"    },
-  sport:       { label:"Pratique sportive",               short:"Sport",         emoji:"⚽", cssVar:"var(--sport)"       },
-  parentalite: { label:"Accompagnement à la parentalité", short:"Parentalité",  emoji:"👨‍👩‍👧", cssVar:"var(--parentalite)" },
+  sante:       { label:"Santé & santé mentale",          short:"Santé",         emoji:"🧠", cssVar:"var(--sante)"       },
+  sciences:    { label:"Sciences & techniques",           short:"Sciences",      emoji:"🔬", cssVar:"var(--sciences)"    },
+  enviro:      { label:"Environnement & DD",              short:"Environnement", emoji:"🌿", cssVar:"var(--enviro)"      },
+  citoyen:     { label:"Citoyenneté",                     short:"Citoyenneté",   emoji:"🗳", cssVar:"var(--citoyen)"     },
+  culture:     { label:"Pratiques culturelles & médias",  short:"Culture",       emoji:"🎭", cssVar:"var(--culture)"     },
+  numerique:   { label:"Éducation au numérique",          short:"Numérique",     emoji:"💻", cssVar:"var(--numerique)"   },
+  intercult:   { label:"Éducation à l'interculturel",     short:"Interculturel", emoji:"🌍", cssVar:"var(--intercult)"   },
+  affectif:    { label:"Vie affective & sexuelle",         short:"Vie affective", emoji:"❤", cssVar:"var(--affectif)"    },
+  sport:       { label:"Pratique sportive",                short:"Sport",         emoji:"⚽", cssVar:"var(--sport)"       },
+  parentalite: { label:"Accompagnement à la parentalité",  short:"Parentalité",  emoji:"👨‍👩‍👧", cssVar:"var(--parentalite)" },
 };
 
 const DATA = [
-  // ── SANTÉ ──
-  { k:"sante",       struct:"Promotion Santé PDL",            desc:`Kit "M'T émotions" : valise programme de 8 séances sur les compétences émotionnelles + guide périscolaire et agenda professionnel CPS.`,                                                                                        url:"http://www.promotionsante-pdl.org" },
-  { k:"sante",       struct:"Parcours le Monde",              desc:"Manuel santé mentale.",                                                                                                                                                                                                         url:"https://go.parcourslemonde.org/" },
-  { k:"sante",       struct:"Essilind",                       desc:"Interventions sexualité infantile (enfants · parents · professionnels).",                                                                                                                                                        url:"http://www.essilind.fr" },
-  { k:"sante",       struct:"Betty au Féminin",               desc:"Escape Game sur le cycle menstruel (ados 11+ ou famille) · ateliers premières règles · Grandir ensemble · Comment parler du cycle menstruel aux jeunes (public professionnel).",                                                url:"http://bettyaufeminin.fr" },
-  // ── SCIENCES ──
-  { k:"sciences",    struct:"Les Petits Débrouillards",       desc:`"Forum sciences" avec Comme au Labo en appui + présentation outil "Imagine Ta Ville".`,                                                                                                                                        url:"https://www.lespetitsdebrouillardsgrandouest.org/services/animations/" },
-  { k:"sciences",    struct:"Les Francas",                    desc:"Malles scientifiques et techniques : Cosmétique, Eau, 25 expériences, Astronomie, Robotique, Électricité, Tout ce qui vole, Fusées à eau…",                                                                                    url:"https://www.francaspaysdelaloire.fr/accueil-maine-et-loire/animation-et-malles-pedagogiques-des-francas-du-maine-et-loire/" },
-  { k:"sciences",    struct:"Terre des Sciences",             desc:"Ateliers robotique, goûters scientifiques, expériences immersives pour les jeunes. Formations à l'animation scientifique pour animateur·ices. Offre spécifique périscolaire.",                                                  url:"https://www.terre-des-sciences.fr/" },
-  { k:"sciences",    struct:"Essilind",                       desc:"Bacs d'exploration sensoriels (petite enfance) · ateliers et escape games scientifiques (3-12 ans) · accompagnement à la création de jeux et d'escape games.",                                                                url:"http://www.essilind.fr" },
-  // ── ENVIRONNEMENT ──
-  { k:"enviro",      struct:"Graine PDL",                     desc:"Parcours Consommation responsable, Écoparlement des jeunes et outils du réseau régional EEDD.",                                                                                                                                 url:"https://www.graine-pdl.org" },
-  { k:"enviro",      struct:"Maison de l'Environnement",      desc:"Malles pédagogiques pour inspirer les structures enfance et jeunesse (Angers Loire Métropole).",                                                                                                                                url:"https://www.angersloiremetropole.fr/mon-quotidien/espaces-nature/maison-de-l-environnement/index.html" },
-  { k:"enviro",      struct:"Atelier Canopé 49",              desc:"Supports pédagogiques : changement climatique, justice climatique, fresque de la renaissance écologique.",                                                                                                                      url:"https://www.reseau-canope.fr" },
-  { k:"enviro",      struct:"Parcours le Monde",              desc:"Escape game des ODD (Objectifs de Développement Durable).",                                                                                                                                                                     url:"https://go.parcourslemonde.org/" },
-  { k:"enviro",      struct:"CPIE Loire Anjou",               desc:"Outils sur la haie et la vie du sol, du cycle 1 au public adolescent.",                                                                                                                                                         url:"https://www.cpieloireanjou.fr/" },
-  { k:"enviro",      struct:"Culture Biome",                  desc:"Animations transition écologique adaptées à l'âge et aux programmes scolaires, pour les scolaires, les centres de loisir, etc.",                                                                                               url:"https://culturebiome.fr/" },
-  // ── CITOYENNETÉ ──
-  { k:"citoyen",     struct:"Fédération des Centres Sociaux", desc:"Jeux de société : pouvoir d'agir des jeunes, la grande traversée, jeu sur l'éducation · exposition malle TDAH.",                                                                                                               url:"https://paysdelaloire.centres-sociaux.fr/federation-des-centres-sociaux-49-53/ressources-du-reseau-49-53/" },
-  { k:"citoyen",     struct:"Les Francas",                    desc:`Malles : "Droit de l'enfant", "Discrimination", "VSSH (Violences sexistes, sexuelles et harcèlement)".`,                                                                                                                       url:"https://www.francaspaysdelaloire.fr/animations-et-malles/droit-de-lenfant-2/" },
-  { k:"citoyen",     struct:"Atelier Canopé 49",              desc:"Supports pédagogiques : escape games · FABLAB · ROBOTIQUE.",                                                                                                                                                                    url:"https://www.reseau-canope.fr/academie-de-nantes/atelier-canope-49-beaucouze.html" },
-  { k:"citoyen",     struct:"Familles Rurales",               desc:"Projet DESIRE (inclusion numérique en milieu rural) + jeux budgétaires dont Budgetissimo.",                                                                                                                                     url:"https://maine-et-loire.famillesrurales.org/179/entraide-et-solidarite" },
-  { k:"citoyen",     struct:"PARH49",                         desc:"Malles pédagogiques empruntables (sensorielle, TSA/TDAH, gestion des émotions…) pour familles et structures accueillant des enfants à besoins spécifiques.",                                                                   url:"https://poleressourceshandicap49.fr/" },
-  { k:"citoyen",     struct:"Graine de Citoyen",              desc:"Malles vivre ensemble (Égalité garçons/filles, Émotions, Gestion de conflits) · malle harcèlement · histoires interactives.",                                                                                                  url:"https://www.asso-grainedecitoyen.fr/" },
-  { k:"citoyen",     struct:"AFOCAL",                         desc:`Malle laïcité et malle "agir contre les discriminations".`,                                                                                                                                                                     url:"https://laicite49.fr/" },
-  { k:"citoyen",     struct:"Ligue de l'Enseignement",        desc:`Malles pédagogiques (livres et jeux), escape game, "émotions".`,                                                                                                                                                               url:"http://www.fol49.org/laligue49/malles-pedagogiques/" },
-  { k:"citoyen",     struct:"INJEP",                          desc:"Centre de ressources : fonds de plus de 50 000 références sur l'éducation populaire, l'engagement, la vie associative, la jeunesse et le sport.",                                                                              url:"https://injep.fr/centre-de-ressources/" },
-  { k:"citoyen",     struct:"Aroéven Pays de la Loire",       desc:"Formations : délégué·es de classe, CVL/CVC, éco-délégué·es, élèves tuteur·ices, jeunes engagé·es dans la vie associative. Cadre : Circulaire n° 2016-092.",                                                                   url:"https://www.aroeven-paysdelaloire.fr/education-formation/nos-interventions/education-a-la-citoyennete" },
-  // ── CULTURE & MÉDIAS ──
-  { k:"culture",     struct:"Orange Platine",                 desc:"Activités culturelles et éducatives + projets artistiques autour du Rythme Signé et de l'improvisation musicale.",                                                                                                             url:"https://orangeplatine.fr/" },
-  { k:"culture",     struct:"Premiers Plans",                 desc:"Table mashup · jeu de cartes Sortie de cinéma · formation L'éducation à l'image en pratique : devenir passeurs d'images en cinéma d'animation.",                                                                              url:"https://passeursdimages.premiersplans.org/" },
-  { k:"culture",     struct:"Radio G",                        desc:"Malles EMI grâce à la radio : visites studio, ateliers radiophoniques (émissions, chroniques, interviews, reportages). Inclusion du public en situation de handicap. Depuis 40 ans.",                                           url:"https://radio-g.fr/internet/index.php?v=2022" },
-  { k:"culture",     struct:"Cinéma Parlant",                 desc:"Ressources pour parler de films après projection. 3 malles pédagogiques : Viva Cinéma (3-14 ans), L'atelier cinéma (9-12 ans), Mon premier cinéma (dès 4 ans).",                                                              url:"http://www.cinemaparlant.com/" },
-  { k:"culture",     struct:"La Fabrik Pedaludique",          desc:"Expositions pédagogiques (Laïcité, égalité filles-Garçons, Travail) · éducation à l'image et au cinéma · cinévoyages citoyens en Europe · lutte contre les discriminations et stéréotypes de genre.",                        url:"https://www.lafabrikpedaludique.org" },
-  { k:"culture",     struct:"Report'Cité",                    desc:"Association d'éducation aux médias : ateliers d'initiation au journalisme et au décryptage de l'information.",                                                                                                                  url:"https://www.helloasso.com/associations/association-report-cite" },
-  // ── NUMÉRIQUE ──
-  { k:"numerique",   struct:"Cyb@njou / Médnum49",            desc:"Malles pédagogiques numériques dans le cadre du projet départemental d'accompagnement aux usages numériques.",                                                                                                                  url:"https://cybanjou.org/" },
-  { k:"numerique",   struct:"Les Francas",                    desc:"Malles numériques : Stop motion, Stylo 3D, Mbot, Makey makey, Robot souris, Cubetto, Fond vert…",                                                                                                                              url:"https://www.francaspaysdelaloire.fr/accueil-maine-et-loire/animation-et-malles-pedagogiques-des-francas-du-maine-et-loire/" },
-  { k:"numerique",   struct:"CEMEA",                          desc:"Ouvrages éditions cafard sur les outils pédagogiques + Médiathèque en ligne Yakamedia.",                                                                                                                                        url:"https://yakamedia.cemea.asso.fr/" },
-  { k:"numerique",   struct:"Fédération des Centres Sociaux", desc:"Malles pédagogiques numériques via Cyb@njou.",                                                                                                                                                                                  url:"https://cybanjou.org/les-malles-pedagogiques-numeriques/" },
-  // ── INTERCULTUREL ──
-  { k:"intercult",   struct:"PdL Coopération Internationale", desc:"Réseau régional multi-acteurs — outils pratiques pour les projets à l'international.",                                                                                                                                          url:"https://www.paysdelaloire-cooperation-internationale.org/" },
-  { k:"intercult",   struct:"Parcours le Monde",              desc:"Outils éduc pop, accompagnement à la mobilité, malles pédagogiques mobilité, expositions et livrets sur l'engagement et l'interculturalité.",                                                                                  url:"https://go.parcourslemonde.org/" },
-  { k:"intercult",   struct:"Familles Rurales",               desc:"Ressources sur l'Europe et la coopération internationale.",                                                                                                                                                                     url:"https://pays-de-la-loire.famillesrurales.org/36/familles-rurales-et-leurope" },
-  { k:"intercult",   struct:"Maison de l'Europe",             desc:"Kit pédagogique sur l'UE · outils ludiques sur l'Europe · espace apprentissage de l'UE · documentation.",                                                                                                                      url:"http://www.maisondeleurope49.eu/" },
-  // ── VIE AFFECTIVE ──
-  { k:"affectif",    struct:"Planning Familial 49",           desc:"Malles de livres et poupées sexuées, éducation à la sexualité et à l'égalité femmes-hommes. Mouvement féministe d'éducation populaire.",                                                                                       url:"https://www.planning-familial.org/fr/le-planning-familial-de-maine-et-loire-49" },
-  { k:"affectif",    struct:"CEMEA",                          desc:"Malles pédagogiques (Genre · Vie affective · Orientation sexuelle).",                                                                                                                                                            url:null },
-  // ── SPORT ──
-  { k:"sport",       struct:"FSCF",                           desc:"Casques de réalité virtuelle · Mur interactif Lü.",                                                                                                                                                                             url:"https://cd.fscf49.org/digitek" },
-  { k:"sport",       struct:"Les Francas",                    desc:"Malles activités physiques : Tchoukball, Peteca, Boccia, Escrime, Kinball, Sarbacane, parachute…",                                                                                                                              url:"https://www.francaspaysdelaloire.fr/accueil-maine-et-loire/animation-et-malles-pedagogiques-des-francas-du-maine-et-loire/" },
-  { k:"sport",       struct:"Familles Rurales",               desc:"La pratique sportive dans mon ACM.",                                                                                                                                                                                            url:null },
-  // ── PARENTALITÉ ──
-  { k:"parentalite", struct:"Réseau Parentalité 49",          desc:"Infos, ressources et outils pour les professionnels et les parents du Maine-et-Loire.",                                                                                                                                         url:"https://parents49.fr/" },
-  { k:"parentalite", struct:"EnJeux",                         desc:"Pôle universitaire de recherche enfance-jeunesse (Pays de la Loire) : agentivité, bien-être à l'école, parentalités, filiations, bien-être des familles.",                                                                     url:"https://enfance-jeunesse.fr/" },
-  { k:"parentalite", struct:"EPE49",                          desc:"École des Parents et des Éducateurs de Maine-et-Loire · lieu ressource pour les parents et les professionnels · soutien à la parentalité · prévention et co-éducation.",                                                       url:"https://ecole-des-parents-et-des-educateurs-49.org/epe-maine-et-libre-page-professionnels" },
+  { k:"sante",       struct:"Promotion Santé PDL",            desc:`Kit "M'T émotions" : valise programme de 8 séances sur les compétences émotionnelles + guide périscolaire et agenda professionnel CPS.`,                                                                    url:"http://www.promotionsante-pdl.org" },
+  { k:"sante",       struct:"Parcours le Monde",              desc:"Manuel santé mentale.",                                                                                                                                                                                     url:"https://go.parcourslemonde.org/" },
+  { k:"sante",       struct:"Essilind",                       desc:"Interventions sexualité infantile (enfants · parents · professionnels).",                                                                                                                                    url:"http://www.essilind.fr" },
+  { k:"sante",       struct:"Betty au Féminin",               desc:"Escape Game sur le cycle menstruel (ados 11+ ou famille) · ateliers premières règles · Grandir ensemble · Comment parler du cycle menstruel aux jeunes (public professionnel).",                            url:"http://bettyaufeminin.fr" },
+  { k:"sciences",    struct:"Les Petits Débrouillards",       desc:`"Forum sciences" avec Comme au Labo en appui + présentation outil "Imagine Ta Ville".`,                                                                                                                    url:"https://www.lespetitsdebrouillardsgrandouest.org/services/animations/" },
+  { k:"sciences",    struct:"Les Francas",                    desc:"Malles scientifiques et techniques : Cosmétique, Eau, 25 expériences, Astronomie, Robotique, Électricité, Tout ce qui vole, Fusées à eau…",                                                                url:"https://www.francaspaysdelaloire.fr/accueil-maine-et-loire/animation-et-malles-pedagogiques-des-francas-du-maine-et-loire/" },
+  { k:"sciences",    struct:"Terre des Sciences",             desc:"Ateliers robotique, goûters scientifiques, expériences immersives pour les jeunes. Formations à l'animation scientifique pour animateur·ices. Offre spécifique périscolaire.",                              url:"https://www.terre-des-sciences.fr/" },
+  { k:"sciences",    struct:"Essilind",                       desc:"Bacs d'exploration sensoriels (petite enfance) · ateliers et escape games scientifiques (3-12 ans) · accompagnement à la création de jeux et d'escape games.",                                            url:"http://www.essilind.fr" },
+  { k:"enviro",      struct:"Graine PDL",                     desc:"Parcours Consommation responsable, Écoparlement des jeunes et outils du réseau régional EEDD.",                                                                                                             url:"https://www.graine-pdl.org" },
+  { k:"enviro",      struct:"Maison de l'Environnement",      desc:"Malles pédagogiques pour inspirer les structures enfance et jeunesse (Angers Loire Métropole).",                                                                                                            url:"https://www.angersloiremetropole.fr/mon-quotidien/espaces-nature/maison-de-l-environnement/index.html" },
+  { k:"enviro",      struct:"Atelier Canopé 49",              desc:"Supports pédagogiques : changement climatique, justice climatique, fresque de la renaissance écologique.",                                                                                                  url:"https://www.reseau-canope.fr" },
+  { k:"enviro",      struct:"Parcours le Monde",              desc:"Escape game des ODD (Objectifs de Développement Durable).",                                                                                                                                                 url:"https://go.parcourslemonde.org/" },
+  { k:"enviro",      struct:"CPIE Loire Anjou",               desc:"Outils sur la haie et la vie du sol, du cycle 1 au public adolescent.",                                                                                                                                     url:"https://www.cpieloireanjou.fr/" },
+  { k:"enviro",      struct:"Culture Biome",                  desc:"Animations transition écologique adaptées à l'âge et aux programmes scolaires, pour les scolaires, les centres de loisir, etc.",                                                                           url:"https://culturebiome.fr/" },
+  { k:"citoyen",     struct:"Fédération des Centres Sociaux", desc:"Jeux de société : pouvoir d'agir des jeunes, la grande traversée, jeu sur l'éducation · exposition malle TDAH.",                                                                                           url:"https://paysdelaloire.centres-sociaux.fr/federation-des-centres-sociaux-49-53/ressources-du-reseau-49-53/" },
+  { k:"citoyen",     struct:"Les Francas",                    desc:`Malles : "Droit de l'enfant", "Discrimination", "VSSH (Violences sexistes, sexuelles et harcèlement)".`,                                                                                                   url:"https://www.francaspaysdelaloire.fr/animations-et-malles/droit-de-lenfant-2/" },
+  { k:"citoyen",     struct:"Atelier Canopé 49",              desc:"Supports pédagogiques : escape games · FABLAB · ROBOTIQUE.",                                                                                                                                                url:"https://www.reseau-canope.fr/academie-de-nantes/atelier-canope-49-beaucouze.html" },
+  { k:"citoyen",     struct:"Familles Rurales",               desc:"Projet DESIRE (inclusion numérique en milieu rural) + jeux budgétaires dont Budgetissimo.",                                                                                                                 url:"https://maine-et-loire.famillesrurales.org/179/entraide-et-solidarite" },
+  { k:"citoyen",     struct:"PARH49",                         desc:"Malles pédagogiques empruntables (sensorielle, TSA/TDAH, gestion des émotions…) pour familles et structures accueillant des enfants à besoins spécifiques.",                                               url:"https://poleressourceshandicap49.fr/" },
+  { k:"citoyen",     struct:"Graine de Citoyen",              desc:"Malles vivre ensemble (Égalité garçons/filles, Émotions, Gestion de conflits) · malle harcèlement · histoires interactives.",                                                                              url:"https://www.asso-grainedecitoyen.fr/" },
+  { k:"citoyen",     struct:"AFOCAL",                         desc:`Malle laïcité et malle "agir contre les discriminations".`,                                                                                                                                                 url:"https://laicite49.fr/" },
+  { k:"citoyen",     struct:"Ligue de l'Enseignement",        desc:`Malles pédagogiques (livres et jeux), escape game, "émotions".`,                                                                                                                                           url:"http://www.fol49.org/laligue49/malles-pedagogiques/" },
+  { k:"citoyen",     struct:"INJEP",                          desc:"Centre de ressources : fonds de plus de 50 000 références sur l'éducation populaire, l'engagement, la vie associative, la jeunesse et le sport.",                                                          url:"https://injep.fr/centre-de-ressources/" },
+  { k:"citoyen",     struct:"Aroéven Pays de la Loire",       desc:"Formations : délégué·es de classe, CVL/CVC, éco-délégué·es, élèves tuteur·ices, jeunes engagé·es dans la vie associative. Cadre : Circulaire n° 2016-092.",                                               url:"https://www.aroeven-paysdelaloire.fr/education-formation/nos-interventions/education-a-la-citoyennete" },
+  { k:"culture",     struct:"Orange Platine",                 desc:"Activités culturelles et éducatives + projets artistiques autour du Rythme Signé et de l'improvisation musicale.",                                                                                         url:"https://orangeplatine.fr/" },
+  { k:"culture",     struct:"Premiers Plans",                 desc:"Table mashup · jeu de cartes Sortie de cinéma · formation L'éducation à l'image en pratique : devenir passeurs d'images en cinéma d'animation.",                                                          url:"https://passeursdimages.premiersplans.org/" },
+  { k:"culture",     struct:"Radio G",                        desc:"Malles EMI grâce à la radio : visites studio, ateliers radiophoniques (émissions, chroniques, interviews, reportages). Inclusion du public en situation de handicap.",                                      url:"https://radio-g.fr/internet/index.php?v=2022" },
+  { k:"culture",     struct:"Cinéma Parlant",                 desc:"Ressources pour parler de films après projection. 3 malles pédagogiques : Viva Cinéma (3-14 ans), L'atelier cinéma (9-12 ans), Mon premier cinéma (dès 4 ans).",                                          url:"http://www.cinemaparlant.com/" },
+  { k:"culture",     struct:"La Fabrik Pedaludique",          desc:"Expositions pédagogiques (Laïcité, égalité filles-Garçons, Travail) · éducation à l'image et au cinéma · cinévoyages citoyens en Europe.",                                                                url:"https://www.lafabrikpedaludique.org" },
+  { k:"culture",     struct:"Report'Cité",                    desc:"Association d'éducation aux médias : ateliers d'initiation au journalisme et au décryptage de l'information.",                                                                                             url:"https://www.helloasso.com/associations/association-report-cite" },
+  { k:"numerique",   struct:"Cyb@njou / Médnum49",            desc:"Malles pédagogiques numériques dans le cadre du projet départemental d'accompagnement aux usages numériques.",                                                                                             url:"https://cybanjou.org/" },
+  { k:"numerique",   struct:"Les Francas",                    desc:"Malles numériques : Stop motion, Stylo 3D, Mbot, Makey makey, Robot souris, Cubetto, Fond vert…",                                                                                                         url:"https://www.francaspaysdelaloire.fr/accueil-maine-et-loire/animation-et-malles-pedagogiques-des-francas-du-maine-et-loire/" },
+  { k:"numerique",   struct:"CEMEA",                          desc:"Ouvrages éditions cafard sur les outils pédagogiques + Médiathèque en ligne Yakamedia.",                                                                                                                   url:"https://yakamedia.cemea.asso.fr/" },
+  { k:"numerique",   struct:"Fédération des Centres Sociaux", desc:"Malles pédagogiques numériques via Cyb@njou.",                                                                                                                                                             url:"https://cybanjou.org/les-malles-pedagogiques-numeriques/" },
+  { k:"intercult",   struct:"PdL Coopération Internationale", desc:"Réseau régional multi-acteurs — outils pratiques pour les projets à l'international.",                                                                                                                     url:"https://www.paysdelaloire-cooperation-internationale.org/" },
+  { k:"intercult",   struct:"Parcours le Monde",              desc:"Outils éduc pop, accompagnement à la mobilité, malles pédagogiques mobilité, expositions et livrets sur l'engagement et l'interculturalité.",                                                             url:"https://go.parcourslemonde.org/" },
+  { k:"intercult",   struct:"Familles Rurales",               desc:"Ressources sur l'Europe et la coopération internationale.",                                                                                                                                                url:"https://pays-de-la-loire.famillesrurales.org/36/familles-rurales-et-leurope" },
+  { k:"intercult",   struct:"Maison de l'Europe",             desc:"Kit pédagogique sur l'UE · outils ludiques sur l'Europe · espace apprentissage de l'UE · documentation.",                                                                                                url:"http://www.maisondeleurope49.eu/" },
+  { k:"affectif",    struct:"Planning Familial 49",           desc:"Malles de livres et poupées sexuées, éducation à la sexualité et à l'égalité femmes-hommes. Mouvement féministe d'éducation populaire.",                                                                  url:"https://www.planning-familial.org/fr/le-planning-familial-de-maine-et-loire-49" },
+  { k:"affectif",    struct:"CEMEA",                          desc:"Malles pédagogiques (Genre · Vie affective · Orientation sexuelle).",                                                                                                                                      url:null },
+  { k:"sport",       struct:"FSCF",                           desc:"Casques de réalité virtuelle · Mur interactif Lü.",                                                                                                                                                       url:"https://cd.fscf49.org/digitek" },
+  { k:"sport",       struct:"Les Francas",                    desc:"Malles activités physiques : Tchoukball, Peteca, Boccia, Escrime, Kinball, Sarbacane, parachute…",                                                                                                        url:"https://www.francaspaysdelaloire.fr/accueil-maine-et-loire/animation-et-malles-pedagogiques-des-francas-du-maine-et-loire/" },
+  { k:"sport",       struct:"Familles Rurales",               desc:"La pratique sportive dans mon ACM.",                                                                                                                                                                      url:null },
+  { k:"parentalite", struct:"Réseau Parentalité 49",          desc:"Infos, ressources et outils pour les professionnels et les parents du Maine-et-Loire.",                                                                                                                   url:"https://parents49.fr/" },
+  { k:"parentalite", struct:"EnJeux",                         desc:"Pôle universitaire de recherche enfance-jeunesse (Pays de la Loire) : agentivité, bien-être à l'école, parentalités, filiations, bien-être des familles.",                                                url:"https://enfance-jeunesse.fr/" },
+  { k:"parentalite", struct:"EPE49",                          desc:"École des Parents et des Éducateurs de Maine-et-Loire · lieu ressource pour les parents et les professionnels · soutien à la parentalité · prévention et co-éducation.",                                  url:"https://ecole-des-parents-et-des-educateurs-49.org/epe-maine-et-loire-page-professionnels" },
 ];
 
 /* ═══════════════════════════════════════════
    HELPERS
 ═══════════════════════════════════════════ */
-function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function linkIcon(size=11) {
-  return `<svg width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`;
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function linkIcon(sz=11) {
+  return `<svg width="${sz}" height="${sz}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`;
+}
+function expandToggle(parentEl, descSel, toggleSel) {
+  parentEl.querySelectorAll(descSel).forEach((desc, i) => {
+    const btn = parentEl.querySelectorAll(toggleSel)[i];
+    if (!btn) return;
+    requestAnimationFrame(() => {
+      if (desc.scrollHeight <= desc.clientHeight + 2) { btn.style.display = 'none'; return; }
+    });
+    btn.addEventListener('click', () => {
+      const p = btn.closest('[data-expandable]') || desc.parentElement.parentElement;
+      p.classList.toggle('expanded');
+      btn.textContent = p.classList.contains('expanded') ? 'Réduire ↑' : 'Lire la suite ↓';
+    });
+  });
 }
 
 /* ═══════════════════════════════════════════
    BUILD VIEW A — PAR THÈME
 ═══════════════════════════════════════════ */
 const themeContainer = document.getElementById('theme-sections');
-const domainOrder = Object.keys(DOMAIN);
 
-domainOrder.forEach(dk => {
+Object.keys(DOMAIN).forEach(dk => {
   const entries = DATA.filter(d => d.k === dk);
   const dom = DOMAIN[dk];
+
   const sg = document.createElement('section');
   sg.className = 'section-group';
   sg.id = `section-${dk}`;
   sg.dataset.domain = dk;
   sg.style.setProperty('--c', dom.cssVar);
 
-  const cardsHtml = entries.map(e => {
-    const linkHtml = e.url
-      ? `<a class="rcard-link" href="${esc(e.url)}" target="_blank" rel="noopener">${linkIcon()} Voir la ressource</a>`
-      : '';
-    return `
-      <article class="rcard" data-struct="${esc(e.struct)}" data-text="${esc((e.struct+' '+e.desc+' '+dom.label).toLowerCase())}">
-        <div class="rcard-name">${esc(e.struct)}</div>
-        <div class="rcard-desc">${esc(e.desc)}</div>
-        <button class="rcard-toggle" type="button">Lire la suite ↓</button>
-        <div class="rcard-footer">
-          ${linkHtml}
-        </div>
-      </article>`;
-  }).join('');
+  const cardsHtml = entries.map(e => `
+    <article class="rcard" data-expandable data-struct="${esc(e.struct)}"
+             data-text="${esc((e.struct+' '+e.desc+' '+dom.label+' '+dom.short).toLowerCase())}">
+      <div class="rcard-name">${esc(e.struct)}</div>
+      <div class="rcard-desc">${esc(e.desc)}</div>
+      <button class="rcard-toggle" type="button">Lire la suite ↓</button>
+      <div class="rcard-footer">
+        ${e.url ? `<a class="rcard-link" href="${esc(e.url)}" target="_blank" rel="noopener">${linkIcon()} Voir la ressource</a>` : ''}
+      </div>
+    </article>`).join('');
 
   sg.innerHTML = `
     <div class="section-header" style="--c:${dom.cssVar}">
-      <span class="section-emoji" aria-hidden="true">${dom.emoji}</span>
+      <div class="section-emoji" aria-hidden="true">${dom.emoji}</div>
       <span class="section-name">${esc(dom.label)}</span>
-      <span class="section-count">${entries.length} ressource${entries.length>1?'s':''}</span>
+      <span class="section-count">${entries.length} ressource${entries.length > 1 ? 's' : ''}</span>
     </div>
     <div class="cards-grid">${cardsHtml}</div>`;
 
   themeContainer.appendChild(sg);
 
-  // Expand toggle per card
   sg.querySelectorAll('.rcard').forEach(card => {
     const desc = card.querySelector('.rcard-desc');
     const btn  = card.querySelector('.rcard-toggle');
     requestAnimationFrame(() => {
-      if (desc.scrollHeight <= desc.clientHeight + 2) { btn.style.display='none'; return; }
+      if (desc.scrollHeight <= desc.clientHeight + 2) btn.style.display = 'none';
     });
     btn.addEventListener('click', () => {
       card.classList.toggle('expanded');
@@ -598,70 +758,61 @@ domainOrder.forEach(dk => {
 /* ═══════════════════════════════════════════
    BUILD VIEW B — PAR STRUCTURE
 ═══════════════════════════════════════════ */
-
-// Group by struct
 const structMap = new Map();
 DATA.forEach(e => {
   if (!structMap.has(e.struct)) structMap.set(e.struct, []);
   structMap.get(e.struct).push(e);
 });
-
-// Sort alphabetically
-const sortedStructs = [...structMap.keys()].sort((a,b) => a.localeCompare(b,'fr'));
-
-// Collect existing first letters
+const sortedStructs = [...structMap.keys()].sort((a, b) => a.localeCompare(b, 'fr'));
 const usedLetters = new Set(sortedStructs.map(s => s[0].toUpperCase()));
 
 // Alphabet bar
 const alphaBar = document.getElementById('alpha-bar');
 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(l => {
   const btn = document.createElement('button');
-  btn.className = 'alpha-chip' + (usedLetters.has(l) ? ' has' : '');
   btn.type = 'button';
+  btn.className = 'alpha-chip' + (usedLetters.has(l) ? ' has' : '');
   btn.textContent = l;
-  btn.dataset.letter = l;
+  btn.setAttribute('aria-label', usedLetters.has(l) ? `Aller à la lettre ${l}` : l);
   if (usedLetters.has(l)) {
     btn.addEventListener('click', () => {
-      const target = document.getElementById(`struct-${l}`);
-      if (target) target.scrollIntoView({ behavior:'smooth', block:'start' });
+      document.getElementById(`struct-${l}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   }
   alphaBar.appendChild(btn);
 });
 
-// Build struct cards
+// Struct cards
 const structGrid = document.getElementById('struct-grid');
 let currentLetter = '';
 
 sortedStructs.forEach(sname => {
   const entries = structMap.get(sname);
   const domains = [...new Set(entries.map(e => e.k))];
-  const isMulti = domains.length > 1;
+  const isMulti  = domains.length > 1;
 
-  // Letter anchor
   const firstLetter = sname[0].toUpperCase();
   if (firstLetter !== currentLetter) {
     currentLetter = firstLetter;
     const anchor = document.createElement('div');
     anchor.id = `struct-${firstLetter}`;
-    anchor.style.cssText = 'grid-column:1/-1;padding-top:8px;';
+    anchor.style.cssText = 'grid-column:1/-1; padding-top:4px;';
     structGrid.appendChild(anchor);
   }
 
   const card = document.createElement('div');
   card.className = 'struct-card';
   card.dataset.struct = sname;
-  card.dataset.text = (sname + ' ' + entries.map(e=>e.desc+' '+DOMAIN[e.k].label).join(' ')).toLowerCase();
+  card.dataset.text = (sname + ' ' + entries.map(e => e.desc + ' ' + DOMAIN[e.k].label).join(' ')).toLowerCase();
 
   const pillsHtml = domains.map(dk =>
-    `<button class="struct-pill" type="button" style="--c:${DOMAIN[dk].cssVar}" data-switch-domain="${dk}">${DOMAIN[dk].emoji} ${esc(DOMAIN[dk].short)}</button>`
+    `<button class="struct-pill" type="button" style="--c:${DOMAIN[dk].cssVar}" data-switch-domain="${dk}">
+       ${DOMAIN[dk].emoji} ${esc(DOMAIN[dk].short)}
+     </button>`
   ).join('');
 
   const entriesHtml = entries.map(e => {
     const dom = DOMAIN[e.k];
-    const linkHtml = e.url
-      ? `<a class="entry-link" href="${esc(e.url)}" target="_blank" rel="noopener">${linkIcon(10)} Voir la ressource</a>`
-      : '';
     return `
       <div class="struct-entry" style="--c:${dom.cssVar}">
         <div class="entry-domain-stripe"></div>
@@ -669,29 +820,25 @@ sortedStructs.forEach(sname => {
           <span class="entry-domain-label">${dom.emoji} ${esc(dom.short)}</span>
           <div class="entry-desc">${esc(e.desc)}</div>
           <button class="entry-toggle" type="button">Lire la suite ↓</button>
-          ${linkHtml}
+          ${e.url ? `<a class="entry-link" href="${esc(e.url)}" target="_blank" rel="noopener">${linkIcon(10)} Voir la ressource</a>` : ''}
         </div>
       </div>`;
   }).join('');
 
-  const badgeHtml = isMulti
-    ? `<span class="multi-badge">${domains.length} domaine${domains.length>1?'s':''}</span>`
-    : '';
-
   card.innerHTML = `
     <div class="struct-head">
       <div class="struct-name">${esc(sname)}</div>
-      ${badgeHtml}
+      ${isMulti ? `<span class="multi-badge">${domains.length} domaine${domains.length > 1 ? 's' : ''}</span>` : ''}
     </div>
     <div class="struct-pills">${pillsHtml}</div>
     <div class="struct-entries">${entriesHtml}</div>`;
 
-  // Expand toggle per entry
+  // Entry expand toggles
   card.querySelectorAll('.struct-entry').forEach(entry => {
     const desc = entry.querySelector('.entry-desc');
     const btn  = entry.querySelector('.entry-toggle');
     requestAnimationFrame(() => {
-      if (desc.scrollHeight <= desc.clientHeight + 2) { btn.style.display='none'; return; }
+      if (desc.scrollHeight <= desc.clientHeight + 2) btn.style.display = 'none';
     });
     btn.addEventListener('click', () => {
       entry.classList.toggle('expanded');
@@ -699,16 +846,15 @@ sortedStructs.forEach(sname => {
     });
   });
 
-  // Domain pill → switch to theme view + filter
+  // Domain pill → switch to theme view filtered
   card.querySelectorAll('[data-switch-domain]').forEach(pill => {
     pill.addEventListener('click', () => {
       switchView('theme');
       const dk = pill.dataset.switchDomain;
       document.querySelectorAll('.domain-chip').forEach(c => c.classList.remove('active'));
-      const target = document.querySelector(`.domain-chip[data-domain="${dk}"]`);
-      if (target) { target.classList.add('active'); }
-      applyThemeFilter(dk, '');
+      document.querySelector(`.domain-chip[data-domain="${dk}"]`)?.classList.add('active');
       document.getElementById('search').value = '';
+      applyThemeFilter(dk, '');
     });
   });
 
@@ -718,17 +864,16 @@ sortedStructs.forEach(sname => {
 /* ═══════════════════════════════════════════
    VIEW SWITCHING
 ═══════════════════════════════════════════ */
-const viewTheme  = document.getElementById('view-theme');
-const viewStruct = document.getElementById('view-struct');
-const domainBar  = document.getElementById('domain-bar');
-
 function switchView(v) {
-  document.querySelectorAll('.vtab').forEach(t => t.classList.toggle('active', t.dataset.view === v));
-  viewTheme.classList.toggle('active',  v === 'theme');
-  viewStruct.classList.toggle('active', v === 'struct');
-  domainBar.style.display = v === 'theme' ? '' : 'none';
+  document.querySelectorAll('.vtab').forEach(t => {
+    t.classList.toggle('active', t.dataset.view === v);
+    t.setAttribute('aria-selected', String(t.dataset.view === v));
+  });
+  document.getElementById('view-theme').classList.toggle('active',  v === 'theme');
+  document.getElementById('view-struct').classList.toggle('active', v === 'struct');
+  document.getElementById('domain-bar').style.display = v === 'theme' ? '' : 'none';
   updateResultCount();
-  window.scrollTo({ top: 0, behavior:'smooth' });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 document.querySelectorAll('.vtab').forEach(tab => {
@@ -742,53 +887,46 @@ let activeDomain = 'all';
 let searchQ = '';
 
 function applyThemeFilter(domain, q) {
-  activeDomain = domain;
-  searchQ = q;
-  let totalVisible = 0;
-
+  activeDomain = domain; searchQ = q;
+  let total = 0;
   document.querySelectorAll('.section-group').forEach(sg => {
     const dk = sg.dataset.domain;
-    const domainMatch = domain === 'all' || dk === domain;
-    if (!domainMatch) { sg.classList.add('hidden'); return; }
+    if (domain !== 'all' && dk !== domain) { sg.classList.add('hidden'); return; }
     sg.classList.remove('hidden');
-
-    let sectionVisible = 0;
-    sg.querySelectorAll('.rcard').forEach(card => {
-      const match = !q || card.dataset.text.includes(q);
-      card.style.display = match ? '' : 'none';
-      if (match) { sectionVisible++; totalVisible++; }
+    let vis = 0;
+    sg.querySelectorAll('.rcard').forEach(c => {
+      const show = !q || c.dataset.text.includes(q);
+      c.style.display = show ? '' : 'none';
+      if (show) { vis++; total++; }
     });
-    sg.style.display = sectionVisible === 0 ? 'none' : '';
+    sg.style.display = vis === 0 ? 'none' : '';
   });
-
-  document.getElementById('theme-no-results').classList.toggle('visible', totalVisible === 0);
-  return totalVisible;
+  document.getElementById('theme-no-results').classList.toggle('visible', total === 0);
+  return total;
 }
 
 function applyStructFilter(q) {
-  let visible = 0;
-  document.querySelectorAll('.struct-card').forEach(card => {
-    const match = !q || card.dataset.text.includes(q);
-    card.classList.toggle('hidden', !match);
-    if (match) visible++;
+  let vis = 0;
+  document.querySelectorAll('.struct-card').forEach(c => {
+    const show = !q || c.dataset.text.includes(q);
+    c.classList.toggle('hidden', !show);
+    if (show) vis++;
   });
-  document.getElementById('struct-no-results').classList.toggle('visible', visible === 0);
-  return visible;
+  document.getElementById('struct-no-results').classList.toggle('visible', vis === 0);
+  return vis;
 }
 
 function updateResultCount() {
-  const isTheme = viewTheme.classList.contains('active');
-  let count;
+  const isTheme = document.getElementById('view-theme').classList.contains('active');
   if (isTheme) {
-    count = [...document.querySelectorAll('.rcard')].filter(c => c.style.display !== 'none').length;
-    document.getElementById('result-count').innerHTML = `<strong>${count}</strong> ressource${count!==1?'s':''}`;
+    const n = [...document.querySelectorAll('.rcard')].filter(c => c.style.display !== 'none').length;
+    document.getElementById('result-count').innerHTML = `<strong>${n}</strong> ressource${n !== 1 ? 's' : ''}`;
   } else {
-    count = [...document.querySelectorAll('.struct-card')].filter(c => !c.classList.contains('hidden')).length;
-    document.getElementById('result-count').innerHTML = `<strong>${count}</strong> structure${count!==1?'s':''}`;
+    const n = [...document.querySelectorAll('.struct-card')].filter(c => !c.classList.contains('hidden')).length;
+    document.getElementById('result-count').innerHTML = `<strong>${n}</strong> structure${n !== 1 ? 's' : ''}`;
   }
 }
 
-// Domain chips
 document.querySelectorAll('.domain-chip').forEach(chip => {
   chip.addEventListener('click', () => {
     document.querySelectorAll('.domain-chip').forEach(c => c.classList.remove('active'));
@@ -798,16 +936,13 @@ document.querySelectorAll('.domain-chip').forEach(chip => {
   });
 });
 
-// Search
 document.getElementById('search').addEventListener('input', e => {
   searchQ = e.target.value.trim().toLowerCase();
-  const isTheme = viewTheme.classList.contains('active');
-  if (isTheme) applyThemeFilter(activeDomain, searchQ);
-  else applyStructFilter(searchQ);
+  const isTheme = document.getElementById('view-theme').classList.contains('active');
+  isTheme ? applyThemeFilter(activeDomain, searchQ) : applyStructFilter(searchQ);
   updateResultCount();
 });
 
-// Init count
 updateResultCount();
 </script>
 </body>
