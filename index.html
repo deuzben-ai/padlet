@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Structures Ressources — Outils Pédagogiques & Accompagnement</title>
+<style>
+  :root {
+    --sante:      #e91e8c;
+    --sciences:   #2979ff;
+    --enviro:     #00c853;
+    --citoyen:    #ff6d00;
+    --culture:    #aa00ff;
+    --numerique:  #00b0ff;
+    --intercult:  #ff9100;
+    --affectif:   #f50057;
+    --sport:      #00bfa5;
+    --parentalite:#76b82a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #0d0d1a;
+    color: #f0f0f8;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    text-align: center;
+    padding: 80px 24px 60px;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 55% at 20% 30%, #e91e8c33 0%, transparent 70%),
+      radial-gradient(ellipse 50% 45% at 80% 20%, #2979ff33 0%, transparent 70%),
+      radial-gradient(ellipse 55% 60% at 50% 90%, #aa00ff33 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-tag {
+    display: inline-block;
+    font-size: .7rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: #aaa;
+    border: 1px solid #333;
+    border-radius: 100px;
+    padding: 4px 14px;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: clamp(1.6rem, 4vw, 3rem);
+    font-weight: 800;
+    line-height: 1.15;
+    max-width: 800px;
+    margin: 0 auto 16px;
+    background: linear-gradient(135deg, #fff 30%, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    color: #888;
+    font-size: .95rem;
+    margin-bottom: 40px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 2rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #fff, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .stat-label { font-size: .75rem; color: #666; text-transform: uppercase; letter-spacing: .1em; }
+
+  /* ── SEARCH & FILTERS ── */
+  .controls {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(13,13,26,.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid #1e1e3a;
+    padding: 14px 24px;
+  }
+  .search-wrap {
+    max-width: 480px;
+    margin: 0 auto 14px;
+    position: relative;
+  }
+  .search-wrap svg {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+  }
+  #search {
+    width: 100%;
+    padding: 10px 14px 10px 40px;
+    background: #16162c;
+    border: 1px solid #2a2a50;
+    border-radius: 100px;
+    color: #f0f0f8;
+    font-size: .9rem;
+    outline: none;
+    transition: border-color .2s;
+  }
+  #search:focus { border-color: #c084fc; }
+  #search::placeholder { color: #555; }
+
+  .filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .filter-btn {
+    cursor: pointer;
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .05em;
+    padding: 5px 14px;
+    border-radius: 100px;
+    border: 1.5px solid transparent;
+    background: #16162c;
+    color: #aaa;
+    transition: all .2s;
+    white-space: nowrap;
+  }
+  .filter-btn:hover { color: #fff; }
+  .filter-btn.active {
+    color: #fff;
+    background: var(--c);
+    border-color: var(--c);
+    box-shadow: 0 0 12px var(--c);
+  }
+
+  /* ── GRID ── */
+  .grid-wrap { padding: 32px 20px 60px; max-width: 1400px; margin: 0 auto; }
+  .grid {
+    columns: 3 320px;
+    column-gap: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    break-inside: avoid;
+    margin-bottom: 18px;
+    border-radius: 16px;
+    background: #13132a;
+    border: 1px solid #1e1e3a;
+    overflow: hidden;
+    transition: transform .25s, box-shadow .25s, opacity .3s;
+    cursor: default;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,.5), 0 0 0 1px var(--c);
+  }
+  .card.hidden { display: none; }
+
+  .card-accent {
+    height: 4px;
+    background: linear-gradient(90deg, var(--c), transparent);
+  }
+  .card-body { padding: 18px 20px 20px; }
+
+  .card-section {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--c);
+    margin-bottom: 10px;
+  }
+  .card-section::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--c);
+    flex-shrink: 0;
+  }
+
+  .card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+  .card-title.no-name {
+    font-style: italic;
+    color: #aaa;
+  }
+
+  .card-desc {
+    font-size: .82rem;
+    color: #9090b0;
+    line-height: 1.65;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .card.expanded .card-desc { -webkit-line-clamp: unset; }
+
+  .card-toggle {
+    margin-top: 8px;
+    font-size: .72rem;
+    color: var(--c);
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: inherit;
+  }
+  .card-toggle:hover { text-decoration: underline; }
+
+  .card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 14px;
+    font-size: .75rem;
+    font-weight: 600;
+    color: var(--c);
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 100px;
+    border: 1px solid var(--c);
+    transition: background .2s, color .2s;
+  }
+  .card-link:hover {
+    background: var(--c);
+    color: #fff;
+  }
+
+  /* ── NO RESULTS ── */
+  #no-results {
+    display: none;
+    text-align: center;
+    padding: 80px 24px;
+    color: #555;
+    font-size: 1.1rem;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 24px;
+    font-size: .75rem;
+    color: #444;
+    border-top: 1px solid #1e1e3a;
+  }
+
+  /* ── FLOATING BLOBS ── */
+  .blobs {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: .07;
+    animation: float linear infinite;
+  }
+  @keyframes float {
+    0%   { transform: translateY(0)   rotate(0deg); }
+    50%  { transform: translateY(-40px) rotate(180deg); }
+    100% { transform: translateY(0)   rotate(360deg); }
+  }
+  .hero, .controls, .grid-wrap, footer { position: relative; z-index: 1; }
+</style>
+</head>
+<body>
+
+<!-- Ambient background blobs -->
+<div class="blobs" aria-hidden="true">
+  <div class="blob" style="width:500px;height:500px;background:#e91e8c;top:-100px;left:-100px;animation-duration:18s"></div>
+  <div class="blob" style="width:400px;height:400px;background:#2979ff;top:30%;right:-80px;animation-duration:22s;animation-delay:-8s"></div>
+  <div class="blob" style="width:600px;height:600px;background:#aa00ff;bottom:-150px;left:30%;animation-duration:26s;animation-delay:-4s"></div>
+  <div class="blob" style="width:350px;height:350px;background:#00c853;bottom:10%;right:10%;animation-duration:20s;animation-delay:-12s"></div>
+</div>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-tag">SDJES49 · Maine-et-Loire</div>
+  <h1>Structures Ressources<br>Outils Pédagogiques &amp; Accompagnement</h1>
+  <p class="hero-sub">Annuaire collaboratif des acteurs de l'éducation populaire en Anjou</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">47</div><div class="stat-label">ressources</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">domaines</div></div>
+    <div class="stat"><div class="stat-num">30+</div><div class="stat-label">structures</div></div>
+  </div>
+</header>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <div class="search-wrap">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input id="search" type="search" placeholder="Rechercher une structure, thème, outil…">
+  </div>
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all" style="--c:#c084fc">Tout</button>
+    <button class="filter-btn" data-filter="sante"       style="--c:var(--sante)">🧠 Santé</button>
+    <button class="filter-btn" data-filter="sciences"    style="--c:var(--sciences)">🔬 Sciences</button>
+    <button class="filter-btn" data-filter="enviro"      style="--c:var(--enviro)">🌿 Environnement</button>
+    <button class="filter-btn" data-filter="citoyen"     style="--c:var(--citoyen)">🗳 Citoyenneté</button>
+    <button class="filter-btn" data-filter="culture"     style="--c:var(--culture)">🎭 Culture &amp; Médias</button>
+    <button class="filter-btn" data-filter="numerique"   style="--c:var(--numerique)">💻 Numérique</button>
+    <button class="filter-btn" data-filter="intercult"   style="--c:var(--intercult)">🌍 Interculturel</button>
+    <button class="filter-btn" data-filter="affectif"    style="--c:var(--affectif)">❤ Vie affective</button>
+    <button class="filter-btn" data-filter="sport"       style="--c:var(--sport)">⚽ Sport</button>
+    <button class="filter-btn" data-filter="parentalite" style="--c:var(--parentalite)">👨‍👩‍👧 Parentalité</button>
+  </div>
+</div>
+
+<!-- GRID -->
+<main class="grid-wrap">
+  <div class="grid" id="grid"></div>
+  <div id="no-results">Aucun résultat pour cette recherche.</div>
+</main>
+
+<footer>
+  Source : Padlet SDJES49 — <a href="https://padlet.com/llemallierafocal/structures-ressources-outils-pedagogiques-accompagnement-il1ur0ewtn68w5ic" style="color:#c084fc" target="_blank" rel="noopener">padlet.com</a>
+</footer>
+
+<script>
+const SECTIONS = {
+  sante:       "Education à la santé et à la santé mentale",
+  sciences:    "Education aux activités scientifiques et techniques",
+  enviro:      "Education à l'environnement et au développement durable",
+  citoyen:     "Education à la citoyenneté",
+  culture:     "Education aux pratiques culturelles et aux médias",
+  numerique:   "Education au numérique",
+  intercult:   "Education à l'interculturel",
+  affectif:    "Education à la vie affective et sexuelle",
+  sport:       "Education à la pratique sportive",
+  parentalite: "Accompagnement à la parentalité",
+};
+
+const COLOR_VARS = {
+  sante: "var(--sante)", sciences: "var(--sciences)", enviro: "var(--enviro)",
+  citoyen: "var(--citoyen)", culture: "var(--culture)", numerique: "var(--numerique)",
+  intercult: "var(--intercult)", affectif: "var(--affectif)", sport: "var(--sport)",
+  parentalite: "var(--parentalite)",
+};
+
+const SECTION_LABELS = {
+  sante:       "Santé & santé mentale",
+  sciences:    "Sciences & techniques",
+  enviro:      "Environnement & DD",
+  citoyen:     "Citoyenneté",
+  culture:     "Culture & médias",
+  numerique:   "Numérique",
+  intercult:   "Interculturel",
+  affectif:    "Vie affective & sexuelle",
+  sport:       "Pratique sportive",
+  parentalite: "Parentalité",
+};
+
+const DATA = [
+  // ── SANTE ──
+  {k:"sante", title:"Promotion santé (M'T émotions)", desc:`Kit "M'T émotions" : valise programme de 8 séances sur les compétences émotionnelles + guide périscolaire et agenda professionnel CPS.`, url:"http://www.promotionsante-pdl.org"},
+  {k:"sante", title:"Parcours le monde", desc:"Manuel santé mentale.", url:"https://go.parcourslemonde.org/"},
+  {k:"sante", title:"Essilind", desc:"Interventions sexualité infantile (enfants - parents - professionnels).", url:"http://www.essilind.fr"},
+  {k:"sante", title:"Betty au Féminin", desc:"Escape Game sur le cycle menstruel (ados à partir de 11 ans ou famille) — ateliers premières règles — Grandir ensemble — Comment parler du cycle menstruel aux jeunes (Public professionnel).", url:"http://bettyaufeminin.fr"},
+  // ── SCIENCES ──
+  {k:"sciences", title:"Petits débrouillards", desc:`"Forum sciences" avec Comme au Labo en appui + présentation outil "Imagine Ta Ville".`, url:"https://www.lespetitsdebrouillardsgrandouest.org/services/animations/"},
+  {k:"sciences", title:"Les Francas", desc:"Malles scientifiques et techniques : Cosmétique, Eau, 25 expériences, Astronomie, Robotique, Électricité, Tout ce qui vole, Fusées à eau…", url:"https://www.francaspaysdelaloire.fr/accueil-maine-et-loire/animation-et-malles-pedagogiques-des-francas-du-maine-et-loire/"},
+  {k:"sciences", title:"Terre des sciences", desc:"Ateliers de robotique, goûters scientifiques, expériences immersives pour les jeunes — aussi possibilité pour les animateur·ice·s d'être formé·e·s à l'animation scientifique.", url:"https://www.terre-des-sciences.fr/"},
+  {k:"sciences", title:"Essilind", desc:"Bacs d'exploration sensoriels (petite enfance) — ateliers scientifiques et escape games scientifiques (3 à 12 ans) — accompagnement à la création de jeux et d'escape games.", url:"http://www.essilind.fr"},
+  // ── ENVIRO ──
+  {k:"enviro", title:"Graine — réseau EEDD", desc:"Présentation du réseau et outils (Parcours Consommation responsable, Écoparlement des jeunes…)", url:"https://www.graine-pdl.org"},
+  {k:"enviro", title:"Maison de l'environnement", desc:"Malles pédagogiques pour inspirer les structures enfance et jeunesse.", url:"https://www.angersloiremetropole.fr/mon-quotidien/espaces-nature/maison-de-l-environnement/index.html"},
+  {k:"enviro", title:"Atelier Canopé 49", desc:"Supports pédagogiques : changement climatique, justice climatique, fresque de la renaissance écologique.", url:"https://www.reseau-canope.fr"},
+  {k:"enviro", title:"Parcours le monde", desc:"Escape game des ODD (objectifs de développement durable).", url:"https://go.parcourslemonde.org/"},
+  {k:"enviro", title:"CPIE Loire Anjou", desc:"Divers outils sur la haie et la vie du sol, du cycle 1 au public adolescent.", url:"https://www.cpieloireanjou.fr/"},
+  {k:"enviro", title:"Culture Biome", desc:"Animations adaptées à l'âge et aux programmes scolaires sur la transition écologique, pour les scolaires, centres de loisir, etc.", url:"https://culturebiome.fr/"},
+  // ── CITOYEN ──
+  {k:"citoyen", title:"Fédération des centres sociaux", desc:"Jeux de société et outils : pouvoir d'agir des jeunes, la grande traversée, jeu sur l'éducation, exposition malle TDAH.", url:"https://paysdelaloire.centres-sociaux.fr/federation-des-centres-sociaux-49-53/ressources-du-reseau-49-53/"},
+  {k:"citoyen", title:"Les Francas", desc:`Malles : "Droit de l'enfant", "Discrimination", "VSSH (Violences sexistes sexuelles et harcèlement)".`, url:"https://www.francaspaysdelaloire.fr/animations-et-malles/droit-de-lenfant-2/"},
+  {k:"citoyen", title:"Atelier Canopé 49", desc:"Supports pédagogiques : escape games / FABLAB / ROBOTIQUE.", url:"https://www.reseau-canope.fr/academie-de-nantes/atelier-canope-49-beaucouze.html"},
+  {k:"citoyen", title:"Fédération Familles rurales", desc:"Projet DESIRE (inclusion numérique en milieu rural) + jeux budgétaires dont Budgetissimo.", url:"https://maine-et-loire.famillesrurales.org/179/entraide-et-solidarite"},
+  {k:"citoyen", title:"Le PARH49", desc:"Pôle d'Appui Ressource Handicap — accompagne familles et structures. Malles pédagogiques empruntables (sensorielle, TSA/TDAH, gestion des émotions…).", url:"https://poleressourceshandicap49.fr/"},
+  {k:"citoyen", title:"Graine de citoyen", desc:"Malles pédagogiques autour du vivre ensemble (Égalité, Émotions, Gestion de conflits), malle harcèlement, histoires interactives.", url:"https://www.asso-grainedecitoyen.fr/"},
+  {k:"citoyen", title:"AFOCAL", desc:"Malle laïcité et malle \"agir contre les discriminations\".", url:"https://laicite49.fr/"},
+  {k:"citoyen", title:"Ligue de l'enseignement", desc:"Malles pédagogiques (livres et jeux), escape game, \"émotions\".", url:"http://www.fol49.org/laligue49/malles-pedagogiques/"},
+  {k:"citoyen", title:"Centre de ressources INJEP", desc:"Fonds spécialisé de plus de 50 000 références sur l'éducation populaire, l'engagement, la vie associative, la jeunesse et le sport.", url:"https://injep.fr/centre-de-ressources/"},
+  {k:"citoyen", title:"Aroéven — Education à la citoyenneté", desc:"Formations variées pour élèves élus (délégué·es de classe, CVL/CVC, éco-délégué·es, élèves tuteur·ices). Axe historique inscrit dans la Circulaire 2016-092.", url:"https://www.aroeven-paysdelaloire.fr/education-formation/nos-interventions/education-a-la-citoyennete"},
+  // ── CULTURE ──
+  {k:"culture", title:"Orange Platine", desc:"Activités culturelles et éducatives + projets artistiques autour du Rythme Signé et de l'improvisation musicale.", url:"https://orangeplatine.fr/"},
+  {k:"culture", title:"Premiers plans — Passeurs d'images", desc:"Table mashup / jeu de cartes Sortie de cinéma / formation L'éducation à l'image en pratique.", url:"https://passeursdimages.premiersplans.org/"},
+  {k:"culture", title:"Radio G", desc:"Malles pédagogiques EMI grâce à la radio — visites studio, ateliers radiophoniques, inclusion du public en situation de handicap.", url:"https://radio-g.fr/internet/index.php?v=2022"},
+  {k:"culture", title:"Cinéma Parlant", desc:"Ressources en ligne pour parler de films après une projection. 3 malles pédagogiques : Viva Cinéma (3-14 ans), L'atelier cinéma (9-12 ans), Mon premier cinéma (dès 4 ans).", url:"http://www.cinemaparlant.com/"},
+  {k:"culture", title:"La Fabrik Pedaludique", desc:"Expositions pédagogiques (Laïcité, égalité filles-Garçons, Travail), éducation à l'image et au cinéma, cinévoyages citoyens en Europe.", url:"https://www.lafabrikpedaludique.org"},
+  {k:"culture", title:"Report'Cité", desc:"Association d'éducation aux médias proposant des ateliers d'initiation au journalisme et au décryptage de l'information.", url:"https://www.helloasso.com/associations/association-report-cite"},
+  // ── NUMERIQUE ──
+  {k:"numerique", title:"Cyb@njou / Médnum49", desc:"Malles pédagogiques numériques développées dans le cadre du projet départemental d'accompagnement aux usages numériques.", url:"https://cybanjou.org/"},
+  {k:"numerique", title:"Les Francas — Numérique", desc:"Malles numériques : Stop motion, Stylo 3D, Mbot, Makey makey, Robot souris, Cubetto, Fond vert…", url:"https://www.francaspaysdelaloire.fr/accueil-maine-et-loire/animation-et-malles-pedagogiques-des-francas-du-maine-et-loire/"},
+  {k:"numerique", title:"Cemea — Yakamedia", desc:"Ouvrages éditions cafard sur les outils pédagogiques + Médiathèque en ligne Yakamedia.", url:"https://yakamedia.cemea.asso.fr/"},
+  {k:"numerique", title:"Fédération centres sociaux — Numérique", desc:"Malles pédagogiques numériques via Cyb@njou.", url:"https://cybanjou.org/les-malles-pedagogiques-numeriques/"},
+  // ── INTERCULT ──
+  {k:"intercult", title:"Pays de la Loire Coopération Internationale", desc:"Réseau régional multi-acteurs pour la coopération internationale — outils pratiques publiés ou relayés pour les projets à l'international.", url:"https://www.paysdelaloire-cooperation-internationale.org/"},
+  {k:"intercult", title:"Parcours le monde — Interculturel", desc:"Outils éduc pop, accompagnement à la mobilité, malles pédagogiques mobilité, expositions et livrets sur l'engagement et l'interculturalité.", url:"https://go.parcourslemonde.org/"},
+  {k:"intercult", title:"Fédération régionale Familles rurales", desc:"Ressources sur l'Europe et la coopération.", url:"https://pays-de-la-loire.famillesrurales.org/36/familles-rurales-et-leurope"},
+  {k:"intercult", title:"Maison de l'Europe", desc:"Kit pédagogique sur l'UE, outils péda et ludiques sur l'Europe, espace apprentissage de l'UE, documentation.", url:"http://www.maisondeleurope49.eu/"},
+  // ── AFFECTIF ──
+  {k:"affectif", title:"Planning familial", desc:"Mouvement féministe d'éducation populaire — malles de livres et poupées sexuées, éducation à la sexualité et à l'égalité femmes-hommes.", url:"https://www.planning-familial.org/fr/le-planning-familial-de-maine-et-loire-49"},
+  {k:"affectif", title:"CEMEA — Vie affective", desc:"Malles pédagogiques (Genre, Vie affective, Orientation sexuelle).", url:null},
+  // ── SPORT ──
+  {k:"sport", title:"FSCF", desc:"Casques de réalité virtuelle / Mur interactif Lü.", url:"https://cd.fscf49.org/digitek"},
+  {k:"sport", title:"Les Francas — Sport", desc:"Malles activités physiques : Tchoukball, Peteca, Boccia, Escrime, Kinball, Sarbacane, parachute…", url:"https://www.francaspaysdelaloire.fr/accueil-maine-et-loire/animation-et-malles-pedagogiques-des-francas-du-maine-et-loire/"},
+  {k:"sport", title:"Fédération Familles rurales — Sport", desc:"La pratique sportive dans mon ACM.", url:null},
+  // ── PARENTALITE ──
+  {k:"parentalite", title:"Réseau parentalité 49", desc:"Infos, ressources et outils pour les professionnels et les parents du Maine et Loire.", url:"https://parents49.fr/"},
+  {k:"parentalite", title:"EnJeux — Pôle universitaire enfance-jeunesse", desc:"Pôle de recherche en SHS et santé dans le domaine de l'enfance-jeunesse porté par les universités ligériennes. Thématiques : agentivité, bien-être à l'école, parentalités, filiations.", url:"https://enfance-jeunesse.fr/"},
+  {k:"parentalite", title:"EPE49 — École des parents et des éducateurs", desc:"Lieu ressource pour les parents et les professionnels — soutien à la parentalité à vocation départementale, prévention et co-éducation.", url:"https://ecole-des-parents-et-des-educateurs-49.org/epe-maine-et-loire-page-professionnels"},
+];
+
+// Build cards
+const grid = document.getElementById('grid');
+DATA.forEach((d, i) => {
+  const color = COLOR_VARS[d.k];
+  const label = SECTION_LABELS[d.k];
+  const card = document.createElement('article');
+  card.className = 'card';
+  card.dataset.k = d.k;
+  card.dataset.text = (d.title + ' ' + d.desc + ' ' + label).toLowerCase();
+  card.style.setProperty('--c', color);
+
+  const linkHtml = d.url
+    ? `<a class="card-link" href="${d.url}" target="_blank" rel="noopener">
+         <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+         Voir la ressource
+       </a>` : '';
+
+  card.innerHTML = `
+    <div class="card-accent"></div>
+    <div class="card-body">
+      <div class="card-section">${label}</div>
+      <div class="card-title">${d.title}</div>
+      <div class="card-desc">${d.desc}</div>
+      <button class="card-toggle" aria-label="Lire la suite">Lire la suite ↓</button>
+      ${linkHtml}
+    </div>`;
+
+  // Toggle expand
+  const descEl = card.querySelector('.card-desc');
+  const toggleBtn = card.querySelector('.card-toggle');
+  toggleBtn.addEventListener('click', () => {
+    card.classList.toggle('expanded');
+    toggleBtn.textContent = card.classList.contains('expanded') ? 'Réduire ↑' : 'Lire la suite ↓';
+  });
+
+  // Hide toggle if text is short
+  requestAnimationFrame(() => {
+    if (descEl.scrollHeight <= descEl.clientHeight + 2) toggleBtn.style.display = 'none';
+  });
+
+  grid.appendChild(card);
+});
+
+// Filter & search
+const cards = Array.from(grid.querySelectorAll('.card'));
+const noResults = document.getElementById('no-results');
+
+function applyFilters() {
+  const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+  const q = document.getElementById('search').value.trim().toLowerCase();
+
+  let visible = 0;
+  cards.forEach(c => {
+    const matchFilter = activeFilter === 'all' || c.dataset.k === activeFilter;
+    const matchSearch = !q || c.dataset.text.includes(q);
+    const show = matchFilter && matchSearch;
+    c.classList.toggle('hidden', !show);
+    if (show) visible++;
+  });
+  noResults.style.display = visible === 0 ? 'block' : 'none';
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyFilters();
+  });
+});
+document.getElementById('search').addEventListener('input', applyFilters);
+</script>
+</body>
+</html>
